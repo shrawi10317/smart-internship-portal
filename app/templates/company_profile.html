@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/company_profile.css') }}">
+
+
+<div class="profile-container">
+
+    <!-- PAGE HEADING -->
+    <div class="profile-header">
+        <h1>Company Profile</h1>
+        <p>Manage your company details and keep your profile updated for better visibility.</p>
+    </div>
+
+    <!-- PROFILE CARD -->
+    <div class="profile-card">
+        <div class="logo-section">
+            <img src="{{ url_for('static', filename='uploads/logos/' + (company.logo or 'default_logo.png')) }}" alt="Company Logo" class="profile-logo">
+        </div>
+
+        <div class="info-section">
+            <h2>{{ company.company_name or 'Company Name' }}</h2>
+            {% if company.website %}
+                <a href="{{ company.website }}" target="_blank" class="company-website">{{ company.website }}</a>
+            {% endif %}
+            {% if company.location %}
+                <p><i class="bi bi-geo-alt"></i> {{ company.location }}</p>
+            {% endif %}
+            {% if company.description %}
+                <p>{{ company.description }}</p>
+            {% endif %}
+        </div>
+
+        <div class="edit-btn-section">
+            <button id="editProfileBtn" class="btn btn-primary btn-lg">
+                <i class="bi bi-pencil"></i> Edit Profile
+            </button>
+        </div>
+    </div>
+
+    <!-- EDIT FORM -->
+    <div id="editFormContainer" class="edit-form-container">
+        <h3>Edit Company Profile</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.company_name.label }}
+                {{ form.company_name(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.website.label }}
+                {{ form.website(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.location.label }}
+                {{ form.location(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.description.label }}
+                {{ form.description(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.logo.label }}
+                {{ form.logo(class="form-control") }}
+            </div>
+
+            <button type="submit" class="btn btn-orange">{{ form.submit.label.text }}</button>
+        </form>
+    </div>
+
+</div>
+
+
+<script>
+    // Toggle edit form
+    const editBtn = document.getElementById('editProfileBtn');
+    const editForm = document.getElementById('editFormContainer');
+
+    editBtn.addEventListener('click', () => {
+        editForm.classList.toggle('show-form');
+        editForm.scrollIntoView({ behavior: 'smooth' });
+    });
+
+</script>
+
+{% if request.args.get('message') %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    const flashMessage = "{{ request.args.get('message') }}";
+    const flashCategory = "{{ request.args.get('category', 'info') }}";
+
+    if(flashMessage){
+        Swal.fire({
+            icon: flashCategory,
+            title: flashMessage,
+            timer: 3000,
+            timerProgressBar: true,
+            showConfirmButton: false
+        });
+    }
+</script>
+{% endif %}
+
+<script>
+const msg = "{{ request.args.get('message') }}";
+const type = "{{ request.args.get('category') }}";
+
+if (msg && msg !== "None") {
+    Swal.fire({
+        icon: type || "info",
+        title: msg,
+        confirmButtonColor: "#111"
+    });
+}
+</script>
+
+{% endblock %}

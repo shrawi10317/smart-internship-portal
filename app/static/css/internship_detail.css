@@ -1,0 +1,263 @@
+/* ===== PAGE ===== */
+body {
+    background: #f4f6f9;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* PAGE BACKGROUND */
+.detail-container {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    background: #f4f6f9;
+}
+
+/* 🔥 MAKE CARD LARGE */
+.detail-card {
+    width: 100%;
+    max-width: 1200px;   /* 🔥 bigger width */
+    background: #ffffff;
+    padding: 38px 45px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    border-top: 5px solid #f97316;
+}
+
+/* TOP */
+.detail-top {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+/* LOGO BIGGER */
+.company-logo {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid #f97316;
+}
+
+/* TITLE BIGGER */
+.detail-top h2 {
+    font-size: 26px;
+    font-weight: 600;
+}
+
+/* COMPANY TEXT */
+.company-name {
+    color: #6b7280;
+    margin-top: 5px;
+    font-size: 14px;
+}
+
+/* INFO BAR */
+.detail-info {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 25px;
+}
+
+.detail-info span {
+    background: #fff7ed;
+    color: #ea580c;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    border: 1px solid #fed7aa;
+}
+
+/* SECTION */
+.section {
+    margin-top: 30px;
+}
+
+.section h4 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+/* DESCRIPTION TEXT */
+.section p {
+    line-height: 1.7;
+    color: #374151;
+    max-width: 95%;
+}
+
+/* SKILLS */
+.skills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.skill-badge {
+    background: #fff7ed;
+    color: #ea580c;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    border: 1px solid #fed7aa;
+}
+
+/* APPLY BUTTON */
+.apply-section {
+    margin-top: 35px;
+    text-align: center;
+}
+
+.apply-btn {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    color: #fff;
+    padding: 14px 35px;
+    border-radius: 10px;
+    font-size: 15px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.apply-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(249,115,22,0.4);
+}
+
+.apply-btn.applied {
+    background: #10b981;
+}
+
+.apply-btn.disabled {
+    background: #9ca3af;
+}
+
+/* HR */
+hr {
+    margin: 30px 0;
+    border: none;
+    border-top: 1px solid #e5e7eb;
+}
+
+
+/* ================= RESPONSIVE FIX FOR DETAIL PAGE ================= */
+
+/* ===== Tablet ===== */
+@media (max-width: 992px) {
+
+    .detail-card {
+        padding: 30px 25px;
+    }
+
+    .detail-top {
+        gap: 18px;
+    }
+
+    .detail-top h2 {
+        font-size: 22px;
+    }
+
+    .company-logo {
+        width: 65px;
+        height: 65px;
+    }
+
+    .detail-info {
+        gap: 12px;
+    }
+
+    .section p {
+        max-width: 100%;
+    }
+}
+
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+
+    .detail-container {
+        padding: 20px 10px;
+    }
+
+    .detail-card {
+        padding: 25px 18px;
+        border-radius: 12px;
+    }
+
+    /* 🔥 Stack layout */
+    .detail-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .detail-top h2 {
+        font-size: 20px;
+    }
+
+    .company-logo {
+        width: 60px;
+        height: 60px;
+    }
+
+    .company-name {
+        font-size: 13px;
+    }
+
+    /* Info badges */
+    .detail-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .detail-info span {
+        width: fit-content;
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
+    /* Sections */
+    .section h4 {
+        font-size: 16px;
+    }
+
+    .section p {
+        font-size: 14px;
+    }
+
+    /* Skills */
+    .skill-badge {
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+
+    /* Button full width */
+    .apply-btn {
+        width: 100%;
+        display: block;
+        text-align: center;
+        padding: 12px;
+    }
+}
+
+
+/* ===== Small Mobile ===== */
+@media (max-width: 480px) {
+
+    .detail-card {
+        padding: 20px 12px;
+    }
+
+    .detail-top h2 {
+        font-size: 18px;
+    }
+
+    .section p {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .apply-btn {
+        font-size: 14px;
+    }
+}

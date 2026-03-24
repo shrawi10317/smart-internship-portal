@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - SmartInternship{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<section class="about-page">
+    <div class="about-container">
+
+        <!-- HEADING -->
+        <h1>About SmartInternship</h1>
+        <p class="subtitle">
+            Bridging the gap between students and real-world opportunities.
+        </p>
+
+        <!-- INTRO -->
+        <div class="about-box fade-up">
+            <h2>Who We Are</h2>
+            <p>
+                SmartInternship connects students with top companies and startups. 
+                Our goal is to simplify internship search and help students gain real-world experience.
+            </p>
+        </div>
+
+        <!-- MISSION -->
+        <div class="about-box fade-up" style="animation-delay:0.1s">
+            <h2>Our Mission</h2>
+            <p>
+                To empower students by providing easy access to verified internships 
+                and helping them build industry-ready skills for their future careers.
+            </p>
+        </div>
+
+        <!-- VISION -->
+        <div class="about-box fade-up" style="animation-delay:0.2s">
+            <h2>Our Vision</h2>
+            <p>
+                To become a leading internship platform where students and companies 
+                connect seamlessly for growth and innovation.
+            </p>
+        </div>
+
+        <!-- FEATURES -->
+        <div class="about-features">
+            <div class="feature fade-up">
+                <i class="fa-solid fa-building"></i>
+                <h3>Verified Companies</h3>
+                <p>All internships come from trusted organizations.</p>
+            </div>
+            <div class="feature fade-up" style="animation-delay:0.1s">
+                <i class="fa-solid fa-user-graduate"></i>
+                <h3>Skill Development</h3>
+                <p>Gain practical experience and improve your skills.</p>
+            </div>
+            <div class="feature fade-up" style="animation-delay:0.2s">
+                <i class="fa-solid fa-rocket"></i>
+                <h3>Career Growth</h3>
+                <p>Start your journey towards a successful career.</p>
+            </div>
+        </div>
+
+        <!-- WHY CHOOSE US -->
+        <h2 class="section-title fade-up">Why Choose Us</h2>
+        <div class="about-features">
+            <div class="feature fade-up">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h3>Secure Platform</h3>
+                <p>Your data and applications are safe with us.</p>
+            </div>
+            <div class="feature fade-up" style="animation-delay:0.1s">
+                <i class="fa-solid fa-bolt"></i>
+                <h3>Fast Process</h3>
+                <p>Apply to internships quickly with a smooth experience.</p>
+            </div>
+            <div class="feature fade-up" style="animation-delay:0.2s">
+                <i class="fa-solid fa-globe"></i>
+                <h3>Wide Reach</h3>
+                <p>Opportunities from multiple industries and locations.</p>
+            </div>
+        </div>
+
+        <!-- STATS SECTION -->
+        <div class="stats-container fade-up">
+            <div class="stat-box">
+                <h3>500+</h3>
+                <p>Internships Posted</p>
+            </div>
+            <div class="stat-box">
+                <h3>200+</h3>
+                <p>Companies</p>
+            </div>
+            <div class="stat-box">
+                <h3>1000+</h3>
+                <p>Students Placed</p>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-box fade-up">
+            <h3>Want to know more?</h3>
+            <p>Reach out to us and start your internship journey today!</p>
+            <a href="{{ url_for('main.contact') }}" class="btn">Get in Touch</a>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

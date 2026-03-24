@@ -1,0 +1,144 @@
+/* ================= POST INTERNSHIP FORM ================= */
+
+/* CARD */
+.card {
+    background: #ffffff;
+    border-radius: 25px;              /* reduced (more professional) */
+    padding: 50px 40px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.10);
+    transition: 0.3s;
+
+    max-width: 750px;                 /* 🔥 FIX: no more ultra wide */
+    width: 100%;
+    margin: 60px auto;
+}
+
+.card:hover {
+    box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+    transform: translateY(-4px);
+}
+
+/* HEADING */
+.card h2 {
+    font-size: 28px;                  /* balanced size */
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* LABELS */
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 15px;
+}
+
+/* INPUTS */
+.form-control {
+    border-radius: 14px;              /* cleaner look */
+    border: 1px solid #e5e7eb;
+    padding: 14px 16px;
+    font-size: 15px;
+    transition: 0.25s;
+    width: 100%;
+}
+
+.form-control:focus {
+    border-color: #f97316;
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.2);
+}
+
+/* TEXTAREA */
+textarea.form-control {
+    min-height: 140px;
+}
+
+/* BUTTON */
+.btn-gradient {
+    background: linear-gradient(135deg, #f97316, #f59e0b);
+    color: #fff;
+    border-radius: 30px;
+    font-size: 16px;
+    padding: 14px 35px;
+    font-weight: 700;
+    transition: 0.3s;
+    border: none;
+}
+
+.btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(249,115,22,0.35);
+}
+
+/* FORM GRID SPACING */
+.row.g-3 > div {
+    margin-bottom: 15px;
+}
+
+/* ============================= */
+/* 📱 MOBILE */
+/* ============================= */
+@media (max-width: 576px) {
+
+    .card {
+        padding: 30px 18px;
+        margin: 40px 10px;
+        border-radius: 18px;
+    }
+
+    .card h2 {
+        font-size: 22px;
+    }
+
+    .form-control {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .btn-gradient {
+        width: 100%;
+        font-size: 15px;
+    }
+}
+
+/* ============================= */
+/* 📲 TABLET */
+/* ============================= */
+@media (min-width: 577px) and (max-width: 991px) {
+
+    .card {
+        max-width: 90%;
+        padding: 40px 25px;
+    }
+
+    .btn-gradient {
+        width: 100%;
+    }
+}
+
+/* ============================= */
+/* 💻 LARGE SCREENS */
+/* ============================= */
+@media (min-width: 1200px) {
+
+    .card {
+        max-width: 700px;   /* 🔥 tighter on big screens */
+    }
+}
+
+/* ============================= */
+/* 🔥 UX IMPROVEMENTS */
+/* ============================= */
+
+/* Smooth UI */
+.card,
+.form-control,
+.btn-gradient {
+    transition: all 0.25s ease;
+}
+
+/* Prevent overflow */
+body {
+    overflow-x: hidden;
+}

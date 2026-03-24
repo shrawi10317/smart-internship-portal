@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - SmartInternship{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/contact.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<section class="contact-page">
+    <div class="contact-container">
+        <h1>Contact Us</h1>
+        <p class="subtitle">We’d love to hear from you. Send us a message!</p>
+
+        <form method="POST" class="contact-form">
+            <input type="text" name="name" placeholder="Your Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+            <button type="submit" class="btn">Send Message</button>
+        </form>
+    </div>
+</section>
+
+{% if request.args.get('sent') == 'true' %}
+<script>
+    alert("Your message has been sent successfully!");
+</script>
+{% endif %}
+
+{% if request.args.get('error') %}
+<script>
+    alert("Error sending message: {{ request.args.get('error') }}");
+</script>
+{% endif %}
+
+{% endblock %}

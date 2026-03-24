@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/apply_internship.css') }}">
+
+<div class="apply-wrapper">
+
+    <div class="apply-card">
+
+        <h2 class="apply-title">Apply for {{ internship.title }}</h2>
+        <p class="apply-subtitle">Fill in your details to apply for this internship</p>
+
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <!-- Full Name -->
+            <div class="form-group">
+                {{ form.full_name.label(class="form-label") }}
+                {{ form.full_name(class="form-control") }}
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                {{ form.email.label(class="form-label") }}
+                {{ form.email(class="form-control") }}
+            </div>
+
+            <!-- Degree -->
+            <div class="form-group">
+                {{ form.degree.label(class="form-label") }}
+                {{ form.degree(class="form-control") }}
+            </div>
+
+            <!-- College -->
+            <div class="form-group">
+                {{ form.college.label(class="form-label") }}
+                {{ form.college(class="form-control") }}
+            </div>
+
+            <!-- Skills -->
+            <div class="form-group">
+                {{ form.skills.label(class="form-label") }}
+                {{ form.skills(class="form-control") }}
+            </div>
+
+            <!-- Cover Letter -->
+            <div class="form-group">
+                {{ form.cover_letter.label(class="form-label") }}
+                {{ form.cover_letter(class="form-control") }}
+            </div>
+
+            <!-- Resume -->
+            <div class="form-group">
+                {{ form.resume.label(class="form-label") }}
+                {{ form.resume(class="form-control-file") }}
+            </div>
+
+            <!-- Submit Button -->
+     <!-- Submit / Status Button -->
+<div class="form-group mt-3">
+    {% if application %}
+        <span class="status-badge {{ application.status }}">
+            {% if application.status == 'pending' %}
+                <i class="fa-solid fa-clock"></i> Pending
+            {% elif application.status == 'accepted' %}
+                <i class="fa-solid fa-check"></i> Accepted
+            {% elif application.status == 'rejected' %}
+                <i class="fa-solid fa-xmark"></i> Rejected
+            {% endif %}
+        </span>
+    {% else %}
+        {{ form.submit(class="btn btn-orange") }}
+    {% endif %}
+</div>
+        </form>
+
+    </div>
+
+</div>
+
+{% if request.args.get('login_required') == 'true' %}
+<script>
+    alert("Please login first!");
+</script>
+{% endif %}
+
+{% if request.args.get('student_only') == 'true' %}
+<script>
+    alert("Only students can apply!");
+</script>
+{% endif %}
+
+{% if request.args.get('already_applied') == 'true' %}
+<script>
+    alert("You already applied for this internship!");
+</script>
+{% endif %}
+
+{% if request.args.get('applied') == 'true' %}
+<script>
+    alert("Application submitted successfully!");
+</script>
+{% endif %}
+
+{% endblock %}

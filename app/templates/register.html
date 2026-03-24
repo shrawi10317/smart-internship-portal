@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Register - SmartInternship{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="register-page">
+
+    <div class="register-card">
+
+        <h2>Create Account</h2>
+        <p class="subtitle">Join SmartInternship today</p>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <!-- NAME -->
+            <div class="floating-group">
+                {{ form.name(class="input", placeholder=" ") }}
+                <label>Full Name</label>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="floating-group">
+                {{ form.email(class="input", placeholder=" ") }}
+                <label>Email Address</label>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="floating-group password-group">
+                {{ form.password(class="input", id="password", placeholder=" ") }}
+                <label>Password</label>
+                <i class="fa-solid fa-eye toggle-password"></i>
+            </div>
+
+            <!-- CONFIRM PASSWORD -->
+            <div class="floating-group password-group">
+                {{ form.confirm_password(class="input", id="confirmPassword", placeholder=" ") }}
+                <label>Confirm Password</label>
+                <i class="fa-solid fa-eye toggle-password-confirm"></i>
+            </div>
+
+            <!-- ROLE -->
+            <div class="role-group">
+                <p class="role-label">Register As</p>
+
+                <div class="radio-container">
+                    {% for subfield in form.role %}
+                    <label class="radio-card">
+                        {{ subfield }}
+                        <span>{{ subfield.label.text }}</span>
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- BUTTON -->
+            {{ form.submit(class="btn-register") }}
+
+        </form>
+
+        <p class="switch">
+            Already have an account?
+            <a href="{{ url_for('auth_main.login') }}">Login</a>
+        </p>
+
+    </div>
+
+</div>
+
+{% if alert_message %}
+<script>
+const redirectUrl = "{{ redirect_url|default('') }}";
+
+Swal.fire({
+    icon: "{{ alert_type }}",
+    title: "{{ alert_message }}",
+    confirmButtonColor: "#111"
+}).then(() => {
+    if (redirectUrl) {
+        window.location.href = redirectUrl;
+    }
+});
+</script>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+
+{% endblock %}

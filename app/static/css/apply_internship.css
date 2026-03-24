@@ -1,0 +1,138 @@
+/* ===== PAGE WRAPPER ===== */
+.apply-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 80vh;
+    padding: 40px 20px;
+    background: #ffffff; /* white background for clarity */
+}
+
+/* ===== CARD ===== */
+.apply-card {
+    width: 100%;
+    max-width: 600px;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 40px 30px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.1);
+    border-top: 5px solid #f97316; /* orange accent */
+}
+
+/* ===== TITLES ===== */
+.apply-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #1f2937;
+}
+
+.apply-subtitle {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-bottom: 25px;
+}
+
+/* ===== FORM GROUP ===== */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-label {
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+.form-control, .form-control-file {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    font-size: 0.95rem;
+    background: #f9fafb;
+    transition: 0.3s;
+}
+
+.form-control:focus, .form-control-file:focus {
+    outline: none;
+    border-color: #f97316;
+    box-shadow: 0 0 8px rgba(249,115,22,0.2);
+}
+
+/* ===== BUTTONS ===== */
+.btn-orange {
+    width: 100%;
+    padding: 12px;
+    background: #f97316;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-orange:hover {
+    background: #ea580c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(249,115,22,0.4);
+}
+
+.btn-disabled {
+    width: 100%;
+    padding: 12px;
+    background: #fbbf24; /* yellow/orange for status */
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: not-allowed;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 767px) {
+    .apply-card {
+        padding: 30px 20px;
+    }
+
+    .apply-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* ===== STATUS BADGES ===== */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    font-weight: 600;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    color: #fff;
+    cursor: default;
+    user-select: none;
+}
+
+/* Pending (orange/yellow) */
+.status-badge.pending {
+    background: #f97316; /* orange */
+}
+
+/* Accepted (green) */
+.status-badge.accepted {
+    background: #10b981; /* teal/green */
+}
+
+/* Rejected (red) */
+.status-badge.rejected {
+    background: #ef4444; /* red */
+}
+
+/* Icons inside badges */
+.status-badge i {
+    font-size: 0.85rem;
+}

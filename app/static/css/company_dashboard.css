@@ -1,0 +1,268 @@
+/* ================= HERO ================= */
+.dashboard-hero {
+    position: relative;
+    background: #fefefe; /* soft off-white */
+    color: #1a1a1a;
+    padding: 140px 20px 100px 20px;
+    text-align: center;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+}
+
+.dashboard-hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    max-width: 900px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+.dashboard-hero p {
+    font-size: 1.3rem;
+    max-width: 700px;
+    margin: 0 auto;
+    color: #555;
+    line-height: 1.6;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.dashboard-hero .hero-btn {
+    margin-top: 30px;
+    padding: 12px 30px;
+    background: #f97316; /* warm accent */
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 15px rgba(249,115,22,0.3);
+}
+
+.dashboard-hero .hero-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(249,115,22,0.4);
+}
+/* ================= STATS CARDS ================= */
+.stat-card {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    transition: 0.3s;
+    color: #333;
+    text-align: center;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(255, 152, 0, 0.2);
+}
+
+.stat-icon {
+    font-size: 32px;
+    color: #ff9800;
+    margin-bottom: 10px;
+}
+
+
+/* ================= INTERNSHIP CARDS ================= */
+.internship-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: 0.3s;
+    color: #333;
+}
+
+.internship-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 152, 0, 0.2);
+}
+
+/* ================= EMPTY STATE ================= */
+.empty-state {
+    padding: 50px;
+    color: #888;
+    text-align: center;
+    font-style: italic;
+}
+
+/* STATS CARDS ROW STYLE */
+.stats-row {
+    display: flex;
+    justify-content: space-around; /* distribute evenly */
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap; /* wrap if screen is very small */
+    gap: 30px;
+    /* margin: 20px; */
+   
+}
+
+.stat-card {
+    flex: 1 1 200px; /* allow resizing, min width 200px */
+    max-width: 400px; /* optional max width */
+    text-align: center;
+    padding: 25px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: 0.3s;
+     margin-right: 15px;
+    
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.stat-icon {
+    font-size: 36px;
+    color: #ff6b00;
+    margin-bottom: 15px;
+}
+
+/* ============================= */
+/* 📱 MOBILE (max 480px) */
+/* ============================= */
+@media (max-width: 480px) {
+
+    /* HERO */
+    .dashboard-hero {
+        padding: 100px 15px 60px 15px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .dashboard-hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .dashboard-hero p {
+        font-size: 1rem;
+    }
+
+    .dashboard-hero .hero-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    /* STATS ROW */
+    .stats-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .stat-card {
+        width: 100%;
+        max-width: 100%;
+        margin-right: 0; /* FIX overflow */
+        padding: 18px;
+    }
+
+    .stat-icon {
+        font-size: 28px;
+    }
+
+    /* INTERNSHIP CARD */
+    .internship-card {
+        padding: 15px;
+    }
+
+    /* EMPTY */
+    .empty-state {
+        padding: 30px 15px;
+        font-size: 14px;
+    }
+}
+
+/* ============================= */
+/* 📲 TABLET (481px - 768px) */
+/* ============================= */
+@media (min-width: 481px) and (max-width: 768px) {
+
+    .dashboard-hero {
+        padding: 120px 20px 80px;
+    }
+
+    .dashboard-hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .dashboard-hero p {
+        font-size: 1.1rem;
+    }
+
+    /* 2 cards per row */
+    .stats-row {
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .stat-card {
+        flex: 0 0 45%;
+        margin-right: 0;
+    }
+}
+
+/* ============================= */
+/* 💻 SMALL LAPTOP (769px - 1024px) */
+/* ============================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    .dashboard-hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .dashboard-hero p {
+        font-size: 1.2rem;
+    }
+
+    .stat-card {
+        flex: 0 0 30%;
+        margin-right: 0;
+    }
+}
+
+/* ============================= */
+/* 🔥 FIX EXISTING ISSUES */
+/* ============================= */
+
+/* REMOVE duplicate justify-content conflict */
+.stats-row {
+    display: flex;
+    justify-content: center; /* keep only one */
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+/* REMOVE overflow issue */
+.stat-card {
+    margin-right: 0;
+}
+
+/* Better touch */
+.stat-card,
+.internship-card,
+.hero-btn {
+    transition: all 0.25s ease;
+}
+
+/* Prevent horizontal scroll */
+body {
+    overflow-x: hidden;
+}

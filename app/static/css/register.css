@@ -1,0 +1,252 @@
+/* PAGE */
+.register-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f3f4f6;
+    padding: 20px;
+}
+
+/* CARD */
+.register-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 35px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    animation: fadeUp 0.5s ease;
+}
+
+/* TITLE */
+.register-card h2 {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
+/* FLOATING INPUT */
+.floating-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+}
+
+/* LABEL */
+.floating-group label {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 13px;
+    color: #9ca3af;
+    transition: 0.2s;
+    background: #fff;
+    padding: 0 4px;
+}
+
+/* FLOAT EFFECT */
+.input:focus + label,
+.input:not(:placeholder-shown) + label {
+    top: -8px;
+    font-size: 11px;
+    color: #111;
+}
+
+/* PASSWORD ICON */
+.password-group i {
+    position: absolute;
+    right: 10px;
+    top: 14px;
+    cursor: pointer;
+    color: #9ca3af;
+}
+
+/* ROLE */
+.role-group {
+    margin-bottom: 20px;
+}
+
+.role-label {
+    font-size: 13px;
+    margin-bottom: 10px;
+    color: #6b7280;
+}
+
+/* RADIO CARDS */
+.radio-container {
+    display: flex;
+    gap: 10px;
+}
+
+.radio-card {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+/* HIDE DEFAULT RADIO */
+.radio-card input {
+    display: none;
+}
+
+/* ACTIVE */
+.radio-card input:checked + span {
+    font-weight: 600;
+    color: #111;
+}
+
+.radio-card:has(input:checked) {
+    border-color: #111;
+    background: #f9fafb;
+}
+
+/* BUTTON */
+.btn-register {
+    width: 100%;
+    padding: 12px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-register:hover {
+    background: #333;
+}
+
+/* FOOTER */
+.switch {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 13px;
+}
+
+/* ANIMATION */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ============================= */
+/* 📱 MOBILE (max 480px) */
+/* ============================= */
+@media (max-width: 480px) {
+
+    .register-page {
+        padding: 15px;
+        align-items: flex-start; /* better scroll on small screens */
+    }
+
+    .register-card {
+        padding: 25px 18px;
+        border-radius: 10px;
+        box-shadow: none;
+        border: none;
+        max-width: 100%;
+    }
+
+    .register-card h2 {
+        font-size: 20px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+    }
+
+    .input {
+        padding: 11px;
+        font-size: 13px;
+    }
+
+    .btn-register {
+        padding: 11px;
+        font-size: 13px;
+    }
+
+    .switch {
+        font-size: 12px;
+    }
+
+    /* 🔥 STACK RADIO BUTTONS */
+    .radio-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .radio-card {
+        font-size: 13px;
+        padding: 12px;
+    }
+}
+
+/* ============================= */
+/* 📲 TABLET (481px - 768px) */
+/* ============================= */
+@media (min-width: 481px) and (max-width: 768px) {
+
+    .register-card {
+        max-width: 380px;
+        padding: 30px;
+    }
+
+    .register-card h2 {
+        font-size: 21px;
+    }
+
+    .radio-container {
+        gap: 8px;
+    }
+}
+
+/* ============================= */
+/* 💻 SMALL LAPTOP (769px - 1024px) */
+/* ============================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    .register-card {
+        max-width: 420px;
+    }
+}
+
+/* ============================= */
+/* 🔥 EXTRA IMPROVEMENTS */
+/* ============================= */
+
+/* Better touch targets */
+.input,
+.btn-register {
+    min-height: 44px;
+}
+
+/* Prevent zoom on iOS */
+input {
+    font-size: 16px;
+}
+
+/* Smooth scaling */
+.register-card {
+    transition: all 0.3s ease;
+}

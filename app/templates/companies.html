@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Companies{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/companies.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- HEADER -->
+<div class="container text-center">
+    <h2 class="page-title">Top Companies</h2>
+    <p class="subtitle">Explore companies actively hiring interns</p>
+</div>
+
+<!-- SEARCH BAR -->
+<div class="container">
+  <form class="search-bar" method="get" action="{{ url_for('main.companies') }}">
+    <!-- Company Search -->
+    <input 
+        type="text" 
+        name="search" 
+        id="searchInput" 
+        value="{{ search }}" 
+        placeholder="Search company..."
+    >
+
+    <!-- Location Filter -->
+    <select name="location" id="locationFilter">
+        <option value="">Select Location</option>
+        {% for company in companies.items %}
+            <option value="{{ company.location }}" {% if company.location == location %}selected{% endif %}>
+                {{ company.location }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <!-- Search Button -->
+    <button type="submit" class="search-btn">Search</button>
+  </form>
+</div>
+
+<!-- COMPANY GRID -->
+<div class="container">
+
+    {% if companies.items %}
+
+    <div class="company-grid" id="companyContainer">
+
+        {% for company in companies.items %}
+        <div class="company-item"
+             data-name="{{ company.company_name | lower }}"
+             data-location="{{ company.location }}">
+
+            <div class="company-card">
+                <div class="company-badge">
+                    <i class="fa-solid fa-briefcase"></i> Hiring
+                </div>
+
+                <img src="{{ url_for('static', filename='uploads/logos/' + (company.logo or 'default.png')) }}"
+                     class="company-logo">
+
+                <h5 class="company-name">{{ company.company_name }}</h5>
+
+                <p class="company-location">
+                    <i class="fa-solid fa-location-dot"></i> {{ company.location }}
+                </p>
+
+                <div class="btn-group">
+                    <a href="{{ company.website }}" target="_blank" class="btn visit-btn outline">
+                        <i class="fa-solid fa-globe"></i> Visit
+                    </a>
+                    <a href="/company/{{ company.id }}" class="btn visit-btn primary">
+                        <i class="fa-solid fa-arrow-right"></i> Details
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- NO RESULT -->
+    <div id="noResult" class="empty-state" style="display:none;">
+        <i class="fa-solid fa-face-frown"></i>
+        <h4>No Matching Companies Found</h4>
+    </div>
+
+    {% else %}
+    <div class="empty-state">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <h4>No Companies Available</h4>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- PAGINATION -->
+<div class="pagination-container">
+    <ul class="pagination">
+
+        {% if companies.has_prev %}
+        <li><a href="?page={{ companies.prev_num }}">Previous</a></li>
+        {% endif %}
+
+        {% for p in companies.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+            {% if p %}
+                <li class="{% if p == companies.page %}active{% endif %}">
+                    <a href="?page={{ p }}">{{ p }}</a>
+                </li>
+            {% else %}
+                <li class="disabled">…</li>
+            {% endif %}
+        {% endfor %}
+
+        {% if companies.has_next %}
+        <li><a href="?page={{ companies.next_num }}">Next</a></li>
+        {% endif %}
+
+    </ul>
+</div>
+
+<script src="{{ url_for('static', filename='js/companies.js') }}"></script>
+
+{% endblock %}

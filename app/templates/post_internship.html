@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Post Internship{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/post_internship.css') }}">
+<!-- Bootstrap CSS for modal -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm p-4 rounded-4 mx-auto" style="max-width: 700px;">
+        <h2 class="mb-4 text-center">Post Internship</h2>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div class="mb-3">
+                {{ form.title.label(class="form-label fw-semibold") }}
+                {{ form.title(class="form-control", placeholder="Enter internship title") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.description.label(class="form-label fw-semibold") }}
+                {{ form.description(class="form-control", placeholder="Write internship description here", rows="4") }}
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    {{ form.stipend.label(class="form-label fw-semibold") }}
+                    {{ form.stipend(class="form-control", placeholder="e.g. 5000/month") }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.duration.label(class="form-label fw-semibold") }}
+                    {{ form.duration(class="form-control", placeholder="e.g. 3 months") }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.location.label(class="form-label fw-semibold") }}
+                    {{ form.location(class="form-control", placeholder="City / Remote") }}
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                {{ form.submit(class="btn btn-gradient px-5 py-2 fw-bold") }}
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ===== SUCCESS POPUP ===== -->
+{% if success %}
+<div class="modal fade show" id="successModal" tabindex="-1" style="display:block; background-color: rgba(0,0,0,0.4);" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      <div class="modal-header border-0">
+        <h5 class="modal-title text-success">Success!</h5>
+        <button type="button" class="btn-close" onclick="closeModal()"></button>
+      </div>
+      <div class="modal-body">
+        Internship posted successfully.
+      </div>
+      <div class="modal-footer border-0">
+        <a href="{{ url_for('company.dashboard') }}" class="btn btn-primary px-4">Go to Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function closeModal() {
+    document.getElementById('successModal').style.display = 'none';
+}
+</script>
+{% endif %}
+
+{% endblock %}

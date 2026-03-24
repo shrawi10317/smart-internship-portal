@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Company Details{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/company_details.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- HEADER -->
+<section class="company-header">
+    <div class="container text-center">
+
+        <div class="logo-wrapper">
+            <img src="{{ url_for('static', filename='uploads/logos/' + (company.logo or 'default.png')) }}"
+                 class="company-logo">
+        </div>
+
+        <h2 class="company-name">{{ company.company_name }}</h2>
+
+        <p class="location">
+            <i class="fa-solid fa-location-dot"></i> {{ company.location }}
+        </p>
+
+        <a href="{{ company.website }}" target="_blank" class="visit-btn">
+            <i class="fa-solid fa-globe"></i> Visit Website
+        </a>
+
+    </div>
+</section>
+
+<!-- MAIN -->
+<div class="container">
+
+    <!-- 🔥 STATS -->
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <i class="fa-solid fa-briefcase"></i>
+            <h4>{{ internships|length }}</h4>
+            <p>Open Roles</p>
+        </div>
+
+        <div class="stat-card">
+            <i class="fa-solid fa-users"></i>
+            <h4>120+</h4>
+            <p>Employees</p>
+        </div>
+
+        <div class="stat-card">
+            <i class="fa-solid fa-star"></i>
+            <h4>4.5</h4>
+            <p>Rating</p>
+        </div>
+
+    </div>
+
+    <!-- ABOUT -->
+    <div class="details-card">
+        <h4><i class="fa-solid fa-circle-info"></i> About Company</h4>
+        <p>
+            {{ company.description or "No description available for this company." }}
+        </p>
+    </div>
+
+</div>
+
+{% endblock %}

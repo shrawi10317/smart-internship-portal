@@ -1,0 +1,209 @@
+/* ================= BASE ================= */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    overflow-x: hidden;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ================= CONTAINER ================= */
+.student-profile-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 15px;
+}
+
+/* ================= HEADER ================= */
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 22px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.profile-header h1 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.profile-header p {
+    font-size: 0.95rem;
+    color: #555;
+    margin: 0;
+}
+
+/* ================= CARDS ================= */
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    padding: 22px;
+    margin-bottom: 20px;
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+/* Card Title */
+.card h4 {
+    color: #ff6b00;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+}
+
+/* ================= SKILLS ================= */
+.skills-badge {
+    display: inline-block;
+    background-color: #ffe6cc;
+    color: #ff6b00;
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin: 3px 4px 3px 0;
+}
+
+/* ================= STATUS ================= */
+.status {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status.accepted {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status.rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ================= BUTTONS ================= */
+
+/* Back Button */
+.btn-secondary {
+    background-color: #ff6b00;
+    color: #fff;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #e55b00;
+}
+
+/* Resume Button */
+.card a.btn-outline-primary {
+    border: 1px solid #ff6b00;
+    color: #ff6b00;
+    padding: 7px 16px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.card a.btn-outline-primary:hover {
+    background-color: #ff6b00;
+    color: #fff;
+}
+
+/* ================= TABLET ================= */
+@media (max-width: 768px) {
+
+    .student-profile-container {
+        margin: 30px 10px;
+        padding: 15px;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .profile-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .card {
+        padding: 18px;
+    }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 576px) {
+
+    .student-profile-container {
+        margin: 20px 8px;
+        padding: 12px;
+        border-radius: 10px;
+    }
+
+    .profile-header {
+        padding: 15px;
+    }
+
+    .profile-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .profile-header p {
+        font-size: 0.85rem;
+    }
+
+    .card {
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .card h4 {
+        font-size: 1.05rem;
+    }
+
+    .skills-badge {
+        font-size: 0.8rem;
+        padding: 3px 8px;
+    }
+
+    /* 🔥 Full width buttons */
+    .btn-secondary,
+    .card a.btn-outline-primary {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* ================= LARGE SCREEN ================= */
+@media (min-width: 1200px) {
+
+    .student-profile-container {
+        max-width: 850px; /* prevents over-stretch */
+    }
+}

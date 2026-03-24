@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/student_profile.css') }}">
+
+<div class="profile-wrapper">
+    <div class="profile-card">
+
+        <!-- COVER -->
+        <div class="profile-cover"></div>
+
+        <!-- PROFILE IMAGE -->
+        <div class="icon-box">
+            <img src="/static/uploads/student_profile/{{ profile_img }}" class="profile-img">
+        </div>
+
+        <!-- CONTENT -->
+        <div class="profile-content">
+
+            <h2 class="profile-title">{{ student.full_name }}</h2>
+            <p class="profile-subtitle">{{ student.email }}</p>
+
+            <div class="profile-info">
+                <p><b>Degree:</b> {{ student.degree or '-' }}</p>
+                <p><b>College:</b> {{ student.college or '-' }}</p>
+                <p><b>Skills:</b> {{ student.skills or '-' }}</p>
+            </div>
+
+            <button id="edit-btn" class="btn-orange">Edit Profile</button>
+
+            <!-- FORM -->
+            <form method="POST" enctype="multipart/form-data" id="edit-form" class="edit-form" style="display:none;">
+                <input type="text" name="full_name" value="{{ student.full_name }}" required>
+                <input type="email" name="email" value="{{ student.email }}" required>
+                <input type="text" name="degree" value="{{ student.degree }}">
+                <input type="text" name="college" value="{{ student.college }}">
+                <input type="text" name="skills" value="{{ student.skills }}">
+                <input type="file" name="profile_pic">
+                <button type="submit" class="btn-orange">Update</button>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+{% if show_popup %}
+<script>
+alert("{{ popup_message }}");
+</script>
+{% endif %}
+
+<script>
+const btn = document.getElementById("edit-btn");
+const form = document.getElementById("edit-form");
+
+btn.onclick = () => {
+    form.style.display = form.style.display === "none" ? "block" : "none";
+};
+
+// live preview
+const input = document.getElementById("profileInput");
+const img = document.querySelector(".profile-img");
+
+input.addEventListener("change", function(){
+    const file = this.files[0];
+    if(file){
+        const reader = new FileReader();
+        reader.onload = e => img.src = e.target.result;
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+
+{% endblock %}

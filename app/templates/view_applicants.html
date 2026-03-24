@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/view_applicants.css') }}">
+
+<div class="container mt-5">
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">Applicants List</h2>
+        <a href="{{ url_for('company.dashboard') }}" class="btn btn-secondary btn-sm">
+            &larr; Back to Dashboard
+        </a>
+    </div>
+
+    <!-- Applicants Table -->
+    <div class="table-responsive shadow-sm rounded-4 bg-white p-3">
+        <table class="table table-bordered table-striped align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Degree</th>
+                    <th>College</th>
+                    <th>Skills</th>
+                    <th>Resume</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in applications %}
+                <tr>
+                    <td>{{ app.full_name }}</td>
+                    <td>{{ app.email }}</td>
+                    <td>{{ app.degree }}</td>
+                    <td>{{ app.college }}</td>
+                    <td>
+                        {% if app.skills %}
+                            {% for skill in app.skills.split(',') %}
+                                <span class="skills-badge">{{ skill.strip() }}</span>
+                            {% endfor %}
+                        {% else %}
+                            N/A
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if app.resume %}
+                        <a href="{{ url_for('static', filename='uploads/resumes/' + app.resume) }}" 
+                           target="_blank" class="btn btn-orange btn-sm">
+                            View Resume
+                        </a>
+                        {% else %}
+                        No Resume
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if app.status == "pending" %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                        {% elif app.status == "accepted" %}
+                        <span class="badge bg-success">Accepted</span>
+                        {% elif app.status == "rejected" %}
+                        <span class="badge bg-danger">Rejected</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if app.status == "pending" %}
+                        <a href="{{ url_for('company.accept_application', id=app.id) }}" 
+                           class="btn btn-success btn-sm me-1">Accept</a>
+                        <a href="{{ url_for('company.reject_application', id=app.id) }}" 
+                           class="btn btn-danger btn-sm">Reject</a>
+                        {% else %}
+                        <span class="text-muted">No Action</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

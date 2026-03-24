@@ -1,0 +1,147 @@
+/* ================= CONTAINER ================= */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* ================= TABLE ================= */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table thead th {
+    font-weight: 600;
+    color: #1a1a1a;
+    padding: 12px;
+}
+
+.table tbody td {
+    vertical-align: middle;
+    color: #555;
+    padding: 12px;
+}
+
+/* ================= SKILLS ================= */
+.skills-badge {
+    display: inline-block;
+    background-color: #ffe6cc;
+    color: #ff6b00;
+    font-size: 0.85rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin: 2px 2px 2px 0;
+}
+
+/* ================= BUTTONS ================= */
+.btn-sm {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.btn-orange, .btn-secondary {
+    background-color: #ff6b00;
+    color: #fff;
+    border: 1px solid #ff6b00;
+    text-decoration: none;
+}
+
+.btn-orange:hover, .btn-secondary:hover {
+    background-color: #e55b00;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: 1px solid #28a745;
+    color: #fff;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+    color: #fff;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* ================= STATUS ================= */
+.badge {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    border-radius: 12px;
+}
+
+.badge.bg-warning { color: #856404; }
+.badge.bg-success { color: #155724; }
+.badge.bg-danger  { color: #721c24; }
+
+/* ================= DISABLED ================= */
+a.btn.disabled, button[disabled] {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* ================= MOBILE VIEW ================= */
+@media (max-width: 768px) {
+
+    /* 🔥 Hide table head */
+    .table thead {
+        display: none;
+    }
+
+    /* 🔥 Convert rows into cards */
+    .table,
+    .table tbody,
+    .table tr,
+    .table td {
+        display: block;
+        width: 100%;
+    }
+
+    .table tr {
+        background: #fff;
+        margin-bottom: 15px;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        border: 1px solid #eee;
+    }
+
+    .table td {
+        text-align: left;
+        padding: 8px 0;
+        border: none;
+        position: relative;
+    }
+
+    /* 🔥 Add labels (IMPORTANT) */
+    .table td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        display: block;
+        color: #333;
+        margin-bottom: 2px;
+        font-size: 13px;
+    }
+
+    /* 🔥 Buttons full width */
+    .table td .btn {
+        display: block;
+        width: 100%;
+        margin-top: 5px;
+        text-align: center;
+    }
+}

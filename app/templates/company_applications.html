@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/company_applications.css') }}">
+
+<div class="applications-container max-width-900 mx-auto my-5">
+
+    <h1 class="mb-4 text-center">Applications</h1>
+
+    {% if message %}
+        <div class="text-center text-muted py-5">
+            <p>{{ message }}</p>
+        </div>
+    {% else %}
+        {% for app in applications %}
+        <div class="app-card shadow-sm rounded-4 p-3 mb-3">
+            <div class="d-flex justify-content-between align-items-start flex-wrap">
+                <div>
+                    <h3 class="fw-bold">{{ app.full_name }}</h3>
+                    <p class="text-muted mb-1">
+                        Internship: <span class="fw-semibold">{{ app.internship.title }}</span>
+                    </p>
+                    <p class="text-muted mb-1">
+                        Degree: {{ app.degree }} | College: {{ app.college }}
+                    </p>
+                </div>
+
+                <span class="status {{ app.status | lower }} text-uppercase fw-bold py-1 px-3 rounded-pill">
+                    {{ app.status }}
+                </span>
+            </div>
+
+            <div class="actions mt-3 d-flex gap-2 flex-wrap">
+                <a href="{{ url_for('company.view_student', student_id=app.student_id) }}" class="btn btn-outline-primary btn-sm">
+                    View Profile
+                </a>
+                <a href="{{ url_for('company.accept_application', id=app.id) }}" class="btn btn-success btn-sm">
+                    Accept
+                </a>
+                <a href="{{ url_for('company.reject_application', id=app.id) }}" class="btn btn-danger btn-sm">
+                    Reject
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+
+</div>
+{% if request.args.get('accepted') == 'true' %}
+<script>
+    alert("Application accepted and email sent!");
+</script>
+{% endif %}
+
+{% if request.args.get('rejected') == 'true' %}
+<script>
+    alert("Application rejected and email sent!");
+</script>
+{% endif %}
+{% endblock %}

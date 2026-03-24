@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/internships.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+
+<!-- 🔍 FILTER BAR -->
+<form method="GET" class="search-bar">
+
+    <div class="search-item">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" name="search" placeholder="Search internships..."
+               value="{{ request.args.get('search','') }}">
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="search-item">
+        <i class="fa-solid fa-location-dot"></i>
+        <select name="location">
+            <option value="">Location</option>
+            {% for loc in locations %}
+                <option value="{{ loc }}"
+                {% if request.args.get('location') == loc %}selected{% endif %}>
+                    {{ loc }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="search-item">
+        <i class="fa-solid fa-clock"></i>
+        <select name="duration">
+            <option value="">Duration</option>
+            {% for dur in durations %}
+                <option value="{{ dur }}"
+                {% if request.args.get('duration') == dur %}selected{% endif %}>
+                    {{ dur }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="search-item">
+        <i class="fa-solid fa-arrow-down-wide-short"></i>
+        <select name="sort">
+            <option value="">Sort</option>
+            <option value="stipend_high" {% if request.args.get('sort')=='stipend_high' %}selected{% endif %}>
+                High Stipend
+            </option>
+            <option value="stipend_low" {% if request.args.get('sort')=='stipend_low' %}selected{% endif %}>
+                Low Stipend
+            </option>
+        </select>
+    </div>
+
+    <button type="submit" class="search-btn">Search</button>
+
+</form>
+
+<div class="internship-page">
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="page-header">
+            <h2 class="page-title">Explore Internships</h2>
+            <p class="subtitle">Find the best opportunities to kickstart your career</p>
+        </div>
+
+        <!-- ❗ EMPTY STATE -->
+        {% if internships|length == 0 %}
+        <div class="no-results">
+            <i class="fa-solid fa-face-frown"></i>
+            <p>No internships found</p>
+            <small>Try different filters</small>
+        </div>
+        {% endif %}
+
+        <!-- ✅ GRID START -->
+        <div class="intern-grid">
+
+            {% for internship in internships %}
+
+            <div class="intern-card" data-url="{{ url_for('main.internship_detail', id=internship.id) }}">
+
+                <!-- 🔥 TRENDING -->
+                {% if internship.is_trending %}
+                <div class="ribbon">
+                    <i class="fa-solid fa-fire"></i> Trending
+                </div>
+                {% endif %}
+
+                <!-- ❤️ SAVE -->
+                <div class="save-btn">
+                    <a href="{{ url_for('main.toggle_wishlist', id=internship.id) }}" class="no-click">
+                        {% if internship.id in wishlist_ids %}
+                            <i class="fa-solid fa-heart saved"></i>
+                        {% else %}
+                            <i class="fa-regular fa-heart"></i>
+                        {% endif %}
+                    </a>
+                </div>
+
+                <!-- TOP -->
+                <div class="card-top">
+                    <img src="{{ url_for('static', filename='uploads/logos/' ~ internship.company.logo) if internship.company and internship.company.logo else url_for('static', filename='uploads/logos/default.png') }}">
+                    <div>
+                        <h5>
+                            <i class="fa-solid fa-briefcase"></i> {{ internship.title }}
+                        </h5>
+                        <p class="company">
+                            <i class="fa-solid fa-building"></i> {{ internship.company.company_name }}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- BADGE -->
+                <div class="badge-hiring">
+                    <i class="fa-solid fa-circle-check"></i> Actively Hiring
+                </div>
+
+                <!-- DETAILS -->
+                <div class="card-middle">
+                    <p><i class="fa-solid fa-location-dot"></i> {{ internship.location }}</p>
+                    <p><i class="fa-solid fa-clock"></i> {{ internship.duration }}</p>
+                    <p class="stipend">
+                        <i class="fa-solid fa-indian-rupee-sign"></i> {{ internship.stipend }}
+                    </p>
+                </div>
+
+                <!-- APPLY COUNT -->
+                <div class="apply-count">
+                    <i class="fa-solid fa-users"></i> {{ internship.apply_count or 0 }} applicants
+                </div>
+
+                <!-- BUTTON -->
+                <div class="card-bottom">
+
+                    {% if session.get('role') == 'student' %}
+
+                        {% if internship.id in applied_ids %}
+                            <button class="apply-btn applied no-click" disabled>
+                                <i class="fa-solid fa-circle-check"></i> Applied
+                            </button>
+                        {% else %}
+                            <a href="{{ url_for('student.apply_internship', id=internship.id) }}" class="apply-btn no-click">
+                                <i class="fa-solid fa-paper-plane"></i> Apply Now
+                            </a>
+                        {% endif %}
+
+                    {% else %}
+                        <a href="{{ url_for('auth_main.login') }}" class="apply-btn disabled no-click">
+                            <i class="fa-solid fa-lock"></i> Login to Apply
+                        </a>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+        <!-- ✅ GRID END -->
+
+    </div>
+</div>
+
+<!-- ✅ CLICKABLE CARD SCRIPT -->
+<script>
+document.querySelectorAll('.intern-card').forEach(card => {
+    card.addEventListener('click', function() {
+        window.location.href = this.dataset.url;
+    });
+});
+</script>
+
+{% endblock %}

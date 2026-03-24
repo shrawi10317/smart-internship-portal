@@ -1,0 +1,215 @@
+/* Dashboard Section */
+.dashboard-section {
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    background: #f4f6f9; /* matches dashboard background */
+}
+
+/* Card */
+.profile-card {
+    width: 100%;
+    max-width: 720px; /* matches dashboard container width */
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    transition: transform 0.3s;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Header */
+.profile-card h2 {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 8px;
+    color: #1f2937;
+}
+
+.profile-card .subtitle {
+    text-align: center;
+    color: #6b7280;
+    margin-bottom: 30px;
+    font-size: 16px;
+}
+
+/* Form Fields */
+.profile-form .form-group {
+    margin-bottom: 20px;
+}
+
+.profile-form label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+.profile-form input,
+.profile-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #f97316; /* orange accent */
+    border-radius: 8px;
+    font-size: 16px;
+    color: #111827;
+    transition: all 0.3s;
+}
+
+.profile-form input:focus,
+.profile-form textarea:focus {
+    border-color: #ff8f1c;
+    box-shadow: 0 0 8px rgba(255, 143, 28, 0.25);
+    outline: none;
+}
+
+.profile-form textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.profile-form input[type="file"] {
+    padding: 5px;
+}
+
+/* Logo Preview */
+.logo-preview {
+    display: block;
+    margin-top: 10px;
+    max-width: 150px;
+    border-radius: 8px;
+    border: 2px solid #f97316;
+}
+
+/* Buttons */
+.btn.save-btn {
+    display: block;
+    width: 100%;
+    background-color: #f97316; /* orange */
+    color: #fff;
+    padding: 14px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn.save-btn:hover {
+    background-color: #ff8f1c;
+    box-shadow: 0 6px 15px rgba(255,143,28,0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-card {
+        padding: 30px 20px;
+    }
+}
+
+/* ============================= */
+/* 📱 MOBILE (max 480px) */
+/* ============================= */
+@media (max-width: 480px) {
+
+    .dashboard-section {
+        padding: 25px 12px;
+        align-items: flex-start; /* better scroll */
+    }
+
+    .profile-card {
+        padding: 22px 15px;
+        border-radius: 10px;
+        box-shadow: none;
+        max-width: 100%;
+    }
+
+    .profile-card h2 {
+        font-size: 22px;
+    }
+
+    .profile-card .subtitle {
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+
+    .profile-form label {
+        font-size: 13px;
+    }
+
+    .profile-form input,
+    .profile-form textarea {
+        padding: 11px;
+        font-size: 14px;
+    }
+
+    .profile-form textarea {
+        min-height: 100px;
+    }
+
+    .btn.save-btn {
+        font-size: 15px;
+        padding: 12px;
+    }
+
+    .logo-preview {
+        max-width: 120px;
+    }
+}
+
+/* ============================= */
+/* 📲 TABLET (481px - 768px) */
+/* ============================= */
+@media (min-width: 481px) and (max-width: 768px) {
+
+    .profile-card {
+        padding: 30px 22px;
+        max-width: 90%;
+    }
+
+    .profile-card h2 {
+        font-size: 24px;
+    }
+
+    .profile-card .subtitle {
+        font-size: 14px;
+    }
+}
+
+/* ============================= */
+/* 💻 SMALL LAPTOP (769px - 1024px) */
+/* ============================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    .profile-card {
+        max-width: 650px;
+    }
+}
+
+/* ============================= */
+/* 🔥 EXTRA PROFESSIONAL TOUCH */
+/* ============================= */
+
+/* Better touch targets */
+.profile-form input,
+.profile-form textarea,
+.btn.save-btn {
+    min-height: 44px;
+}
+
+/* Smooth UI feel */
+.profile-card,
+.btn.save-btn,
+.profile-form input,
+.profile-form textarea {
+    transition: all 0.25s ease;
+}
+
+/* Prevent overflow issues */
+body {
+    overflow-x: hidden;
+}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Login - SmartInternship{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% endblock %}
+
+{% block content %}
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Sign in to your account</p>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <!-- EMAIL -->
+            <div class="floating-group">
+                {{ form.email(class="input", placeholder=" ") }}
+                <label>Email Address</label>
+            </div>
+
+            <!-- PASSWORD -->
+            <div class="floating-group password-group">
+                {{ form.password(class="input", id="password", placeholder=" ") }}
+                <label>Password</label>
+                <i class="fa-solid fa-eye toggle-password"></i>
+            </div>
+
+            <!-- FORGOT -->
+            <div class="form-options">
+                <a href="{{ url_for('auth_main.forgot_password') }}">Forgot password?</a>
+            </div>
+
+            <!-- BUTTON -->
+            {{ form.submit(class="btn-login") }}
+
+        </form>
+
+        <p class="register-text">
+            Don’t have an account?
+            <a href="{{ url_for('auth_main.register') }}">Register</a>
+        </p>
+
+    </div>
+
+</div>
+
+{% if alert_message %}
+<script>
+const redirectUrl = "{{ redirect_url|default('') }}";
+
+Swal.fire({
+    icon: "{{ alert_type }}",
+    title: "{{ alert_message }}",
+    confirmButtonColor: "#111"
+}).then(() => {
+    if (redirectUrl) {
+        window.location.href = redirectUrl;
+    }
+});
+</script>
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/company_dashboard.css') }}">
+
+<!-- HERO -->
+<section class="dashboard-hero">
+    <h1>Welcome back, {{ company_name }}!</h1>
+    <p>Manage your internships, track applications, and connect with talented students effortlessly.</p>
+    <a href="{{ url_for('company.dashboard') }}" class="hero-btn">View Internships</a>
+</section>
+<!-- STATS -->
+<div class="container mt-4 stats-row">
+
+    <div class="stat-card">
+        <i class="bi bi-briefcase stat-icon"></i>
+        <h3>{{ internships|length }}</h3>
+        <p>Total Internships</p>
+    </div>
+
+    <div class="stat-card">
+        <i class="bi bi-people stat-icon"></i>
+        <h3>{{ total_applicants}}</h3>
+        <p>Total Applicants</p>
+    </div>
+
+    <div class="stat-card">
+        <i class="bi bi-check-circle stat-icon"></i>
+        <h3>{{ active_count or 0 }}</h3>
+        <p>Active Internships</p>
+    </div>
+
+</div>
+<!-- ACTION BUTTON -->
+<div class="container mt-4 text-end">
+    <a href="{{ url_for('company.post_internship') }}" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Post New Internship
+    </a>
+</div>
+
+<!-- INTERNSHIPS -->
+<div class="container mt-3">
+
+    <h3 class="mb-3">Your Internships</h3>
+
+    {% if internships %}
+
+    <div class="row">
+
+        {% for internship in internships %}
+
+        <div class="col-md-4">
+            <div class="internship-card">
+
+                <h5>{{ internship.title }}</h5>
+
+                <p><i class="bi bi-geo-alt"></i> {{ internship.location }}</p>
+
+                <p><i class="bi bi-cash"></i> {{ internship.stipend }}</p>
+
+                <!-- ACTIONS -->
+                <div class="btn-group mt-2">
+
+                    <a href="{{ url_for('company.edit_internship', id=internship.id) }}"
+                       class="btn btn-warning btn-sm">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+
+                    <a href="{{ url_for('company.delete_internship', id=internship.id) }}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Delete this internship?')">
+                        <i class="bi bi-trash"></i>
+                    </a>
+
+                    <a href="{{ url_for('company.view_applicants', internship_id=internship.id) }}"
+                       class="btn btn-primary btn-sm">
+                        <i class="bi bi-people"></i>
+                    </a>
+
+                </div>
+
+            </div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <!-- EMPTY STATE -->
+    <div class="empty-state text-center">
+        <i class="bi bi-folder-x" style="font-size:50px;"></i>
+        <h4 class="mt-3">No Internships Posted</h4>
+        <p>Start by posting your first internship</p>
+
+        <a href="{{ url_for('company.post_internship') }}" class="btn btn-primary">
+            Post Internship
+        </a>
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const counters = document.querySelectorAll('.counter');
+    counters.forEach(counter => {
+        const updateCount = () => {
+            const target = +counter.getAttribute('data-count');
+            const count = +counter.innerText;
+            const speed = 50; // lower = faster
+
+            const increment = Math.ceil(target / speed);
+
+            if(count < target){
+                counter.innerText = count + increment;
+                setTimeout(updateCount, 20);
+            } else {
+                counter.innerText = target;
+            }
+        };
+        updateCount();
+    });
+});
+</script>
+
+<script>
+const msg = "{{ request.args.get('message') }}";
+const type = "{{ request.args.get('category') }}";
+
+if (msg && msg !== "None") {
+    Swal.fire({
+        icon: type || "info",
+        title: msg,
+        confirmButtonColor: "#111"
+    });
+}
+</script>
+
+
+{% if request.args.get('deleted') == 'true' %}
+<script>
+    alert("Internship deleted successfully!");
+</script>
+{% endif %}
+
+{% endblock %}

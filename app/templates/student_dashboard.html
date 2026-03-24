@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/student_dashboard.css') }}">
+
+<!-- ================= HERO ================= -->
+<section class="student-hero">
+    <div class="container text-center">
+        <h1>Welcome, {{ session.get('name') }} 👋</h1>
+        <p>Explore internships, track applications, and build your future.</p>
+
+        <div class="hero-btns">
+            <a href="{{ url_for('main.internships') }}" class="btn btn-light">
+                Browse Internships
+            </a>
+
+            <a href="{{ url_for('student.my_applications') }}" class="btn btn-outline-light">
+                My Applications
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ================= STATS ================= -->
+<div class="container stats-container">
+    <div class="row text-center">
+
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3>{{ total_applications }}</h3>
+                <p>Total Applied</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card success">
+                <h3>{{ accepted }}</h3>
+                <p>Accepted</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card warning">
+                <h3>{{ pending }}</h3>
+                <p>Pending</p>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card danger">
+                <h3>{{ rejected }}</h3>
+                <p>Rejected</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- ================= INTERNSHIPS ================= -->
+<div class="container internship-section">
+
+    <div class="section-header">
+        <h2>Latest Internships</h2>
+        <p>Apply to opportunities that match your skills</p>
+    </div>
+
+    <div class="row">
+
+        {% for internship in internships %}
+        <div class="col-md-4">
+            <div class="internship-card">
+
+                <h5>{{ internship.title }}</h5>
+                <p><i class="bi bi-geo-alt"></i> {{ internship.location }}</p>
+
+                <!-- APPLY BUTTON LOGIC -->
+                {% if internship.id in applied_ids %}
+                    <button class="btn btn-applied" disabled>
+                        Applied ✓
+                    </button>
+                {% else %}
+                    <a href="{{ url_for('student.apply_internship', id=internship.id) }}" 
+                       class="btn btn-apply">
+                        Apply Now
+                    </a>
+                {% endif %}
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

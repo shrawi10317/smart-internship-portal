@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Internship{% endblock %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/edit_internship.css') }}">
+<div class="edit-wrapper">
+    <div class="edit-card">
+
+        <h2 class="form-title">Edit Internship</h2>
+        <p class="form-subtitle">Update internship details below</p>
+
+        <form method="POST">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.title.label(class="form-label") }}
+                {{ form.title(class="form-input", placeholder="Enter internship title") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.description.label(class="form-label") }}
+                {{ form.description(class="form-input textarea", placeholder="Enter description") }}
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form.stipend.label(class="form-label") }}
+                    {{ form.stipend(class="form-input", placeholder="₹ Stipend") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.duration.label(class="form-label") }}
+                    {{ form.duration(class="form-input", placeholder="e.g. 3 Months") }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form.location.label(class="form-label") }}
+                {{ form.location(class="form-input", placeholder="Enter location") }}
+            </div>
+
+            <div class="form-actions">
+                {{ form.submit(class="btn-primary") }}
+                <a href="{{ url_for('company.dashboard') }}" class="btn-secondary">Cancel</a>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% if alert_message %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+Swal.fire({
+    icon: "{{ alert_type }}",
+    title: "{{ alert_message }}",
+    confirmButtonColor: "#ff6b00"
+}).then(() => {
+    window.location.href = "{{ redirect_url }}";
+});
+</script>
+{% endif %}
+
+{% endblock %}

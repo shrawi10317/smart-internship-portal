@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block body_class %}home-page{% endblock %}
+
+{% block content %}
+
+<!-- HERO SLIDER -->
+ 
+<div class="hero">
+    <div class="mySlides active">
+        <img src="{{ url_for('static', filename='images/slide1.jpg') }}">
+        <div class="hero-content">
+            <h1>Find Your Dream Internship</h1>
+            <p>Explore opportunities from top startups and companies.</p>
+            <a href="#" class="hero-btn">Explore Internships</a>
+        </div>
+    </div>
+
+    <div class="mySlides">
+        <img src="{{ url_for('static', filename='images/slide2.jpg') }}">
+        <div class="hero-content">
+            <h1>Connect With Top Companies</h1>
+            <p>Apply to verified internships and grow your career.</p>
+        </div>
+    </div>
+
+    <div class="mySlides">
+        <img src="{{ url_for('static', filename='images/slide3.jpg') }}">
+        <div class="hero-content">
+            <h1>Start Your Career Journey</h1>
+            <p>Build real-world experience and skills.</p>
+        </div>
+    </div>
+
+    <!-- ARROWS -->
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a class="next" onclick="plusSlides(1)">❯</a>
+
+    <!-- DOTS -->
+    <div class="hero-dots">
+        <span class="dot active" onclick="currentSlide(1)"></span>
+        <span class="dot" onclick="currentSlide(2)"></span>
+        <span class="dot" onclick="currentSlide(3)"></span>
+    </div>
+</div>
+
+<!-- FEATURED INTERNSHIPS -->
+<section class="internships">
+    <h2>Featured Internships</h2>
+    <div class="internship-container">
+        <div class="card">
+            <i class="fa-solid fa-code"></i>
+            <h3>Web Development</h3>
+            <p>Work with startups and build real-world websites.</p>
+            <a href="{{ url_for('auth_main.login') }}" class="apply-btn">Apply Now</a>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-mobile-screen"></i>
+            <h3>Android Development</h3>
+            <p>Build modern mobile applications using Android.</p>
+            <a href="{{ url_for('auth_main.login') }}" class="apply-btn">Apply Now</a>
+        </div>
+        <div class="card">
+            <i class="fa-solid fa-chart-line"></i>
+            <h3>Data Science</h3>
+            <p>Learn data analysis and machine learning skills.</p>
+            <a href="{{ url_for('auth_main.login') }}" class="apply-btn">Apply Now</a>
+        </div>
+    </div>
+</section>
+
+<!-- WHY SECTION -->
+<section class="why">
+    <h2>Why Choose SmartInternship?</h2>
+    <div class="why-container">
+        <div class="why-box">
+            <i class="fa-solid fa-building"></i>
+            <h3>Top Companies</h3>
+            <p>Get internship opportunities from verified companies.</p>
+        </div>
+        <div class="why-box">
+            <i class="fa-solid fa-user-graduate"></i>
+            <h3>Skill Development</h3>
+            <p>Build industry-ready skills through real projects.</p>
+        </div>
+        <div class="why-box">
+            <i class="fa-solid fa-rocket"></i>
+            <h3>Career Growth</h3>
+            <p>Kickstart your career with the right opportunities.</p>
+        </div>
+    </div>
+</section>
+<script>
+window.addEventListener('scroll', function() {
+    const body = document.body;
+    if(window.scrollY > 50){
+        body.classList.add('scrolled');       // add .scrolled
+        body.classList.add('navbar-scrolled'); // specifically for navbar
+    } else {
+        body.classList.remove('scrolled');
+        body.classList.remove('navbar-scrolled');
+    }
+});
+
+
+</script>
+
+<script>
+    // Use JS only
+    const logoutMessage = "{{ logout_message if logout_message else '' }}";
+    if (logoutMessage) {
+        alert(logoutMessage);
+    }
+</script>
+
+
+<script src="{{ url_for('static', filename='js/slider.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,161 @@
+/* ================= BASE ================= */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+/* ================= WRAPPER ================= */
+.profile-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    padding: 0 15px; /* 🔥 prevent edge touching */
+}
+
+/* ================= CARD ================= */
+.profile-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 450px; /* 🔥 key fix */
+    text-align: center;
+}
+
+/* ================= IMAGE ================= */
+.icon-box {
+    margin-bottom: 20px;
+}
+
+.icon-box img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #ff6600;
+}
+
+.icon-box i {
+    font-size: 120px;
+    color: #ccc;
+}
+
+/* ================= TITLE ================= */
+.profile-title {
+    margin-bottom: 25px;
+    font-weight: 600;
+    color: #ff6600;
+    font-size: 22px;
+}
+
+/* ================= FORM ================= */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+/* ================= BUTTON ================= */
+.btn-orange {
+    background: #ff6600;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    width: 100%;
+    transition: background 0.3s;
+}
+
+.btn-orange:hover {
+    background: #e65500;
+}
+
+/* ================= TABLET ================= */
+@media (max-width: 768px) {
+
+    .profile-wrapper {
+        margin-top: 40px;
+    }
+
+    .profile-card {
+        padding: 25px;
+    }
+
+    .icon-box img {
+        width: 120px;
+        height: 120px;
+    }
+
+    .icon-box i {
+        font-size: 100px;
+    }
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 576px) {
+
+    .profile-wrapper {
+        margin-top: 30px;
+    }
+
+    .profile-card {
+        padding: 20px 15px;
+        border-radius: 10px;
+    }
+
+    .profile-title {
+        font-size: 20px;
+    }
+
+    .icon-box img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .icon-box i {
+        font-size: 80px;
+    }
+
+    .form-control {
+        padding: 9px;
+        font-size: 13px;
+    }
+
+    .btn-orange {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+/* ================= LARGE SCREEN CONTROL ================= */
+@media (min-width: 1200px) {
+
+    .profile-wrapper {
+        margin-top: 60px;
+    }
+
+    .profile-card {
+        max-width: 420px; /* 🔥 prevents too wide look */
+    }
+}

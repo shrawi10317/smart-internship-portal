@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Create Company Profile{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create_company_profile.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="dashboard-section">
+    <div class="profile-card">
+        <h2>Create Your Company Profile</h2>
+        <p class="subtitle">Fill in your company details to start posting internships</p>
+
+        <form method="POST" enctype="multipart/form-data" class="profile-form">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.company_name.label }}
+                {{ form.company_name(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.website.label }}
+                {{ form.website(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.location.label }}
+                {{ form.location(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.description.label }}
+                {{ form.description(class="form-control") }}
+            </div>
+
+            <div class="form-group">
+                {{ form.logo.label }}
+                {{ form.logo(class="form-control-file", id="logoInput") }}
+                <img id="logoPreview" class="logo-preview" src="#" alt="Logo Preview" style="display:none;">
+            </div>
+
+            <div class="form-group">
+                {{ form.submit(class="btn save-btn") }}
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Logo Preview (same as your code)
+    const logoInput = document.getElementById('logoInput');
+    const logoPreview = document.getElementById('logoPreview');
+
+    logoInput.addEventListener('change', function(event){
+        const file = event.target.files[0];
+        if(file){
+            logoPreview.src = URL.createObjectURL(file);
+            logoPreview.style.display = 'block';
+        } else {
+            logoPreview.style.display = 'none';
+        }
+    });
+
+    /* ============================= */
+    /* 🔥 SWEET ALERT POPUP SYSTEM */
+    /* ============================= */
+
+    const flashMessage = "{{ message or request.args.get('message') }}";
+    let flashCategory = "{{ category or request.args.get('category') }}";
+
+    // Default fallback
+    if (!flashCategory) {
+        flashCategory = "info";
+    }
+
+    // Convert Flask-style categories to SweetAlert icons
+    const iconMap = {
+        success: "success",
+        error: "error",
+        danger: "error",
+        warning: "warning",
+        info: "info"
+    };
+
+    if (flashMessage && flashMessage !== "None") {
+        Swal.fire({
+            icon: iconMap[flashCategory] || "info",
+            title: flashMessage,
+            confirmButtonColor: "#111",
+            backdrop: true
+        });
+    }
+</script>
+
+<script>
+const msg = "{{ request.args.get('message') }}";
+const type = "{{ request.args.get('category') }}";
+
+if (msg && msg !== "None") {
+    Swal.fire({
+        icon: type || "info",
+        title: msg,
+        confirmButtonColor: "#111"
+    });
+}
+</script>
+
+{% if request.args.get('alert_message') %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+Swal.fire({
+    icon: "{{ request.args.get('alert_type') }}",
+    title: "{{ request.args.get('alert_message') }}",
+    confirmButtonColor: "#ff6b00"
+});
+</script>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="login-page">
+
+    <div class="login-card">
+
+        <h2>Verify OTP</h2>
+        <p class="subtitle">Enter the 6-digit OTP sent to your email</p>
+
+        <form method="POST">
+
+            <div class="floating-group">
+                <input type="text" name="otp" id="otpInput"
+                       class="input"
+                       maxlength="6"
+                       pattern="\d{6}"
+                       required
+                       placeholder=" ">
+                <label>Enter OTP</label>
+            </div>
+
+            <button class="btn-login">Verify</button>
+
+        </form>
+
+<div class="resend-section">
+    <p id="timer">Resend OTP in 30s</p>
+
+    <form action="{{ url_for('auth_main.resend_otp') }}" method="post" style="display:inline;">
+        <button type="submit" id="resendBtn" class="resend-btn" disabled>
+            🔁 Resend OTP
+        </button>
+    </form>
+</div>
+    </div>
+</div>
+<script>
+let timeLeft = 30;
+let timerElement = document.getElementById('timer');
+let resendBtn = document.getElementById('resendBtn');
+
+let countdown = setInterval(() => {
+    if(timeLeft > 0){
+        timeLeft--;
+        timerElement.textContent = `Resend OTP in ${timeLeft}s`;
+    } else {
+        clearInterval(countdown);
+        timerElement.textContent = "You can resend OTP now!";
+        resendBtn.disabled = false;
+    }
+}, 1000);
+</script>
+
+{% if request.args.get('otp_sent') == 'true' %}
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'OTP sent successfully!',
+    showConfirmButton: true,
+    confirmButtonColor: '#ff6b00'
+});
+</script>
+
+{% if alert_message %}
+<script>
+Swal.fire({
+    icon: "{{ alert_type }}",
+    title: "{{ alert_message }}",
+    confirmButtonColor: "#ff6b00"
+});
+</script>
+{% endif %}
+{% endif %}
+{% endblock %}

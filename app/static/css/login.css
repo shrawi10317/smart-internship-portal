@@ -1,0 +1,297 @@
+/* PAGE CENTER */
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #f3f4f6;
+    padding: 20px;
+}
+
+/* CARD */
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 35px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    animation: fadeUp 0.5s ease;
+}
+
+/* TITLE */
+.login-card h2 {
+    margin-bottom: 5px;
+    font-size: 22px;
+    font-weight: 600;
+    color: #111;
+}
+
+.subtitle {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 20px;
+}
+
+/* INPUT */
+.floating-group {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+    background: #fff;
+}
+
+/* LABEL */
+.floating-group label {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-size: 13px;
+    color: #9ca3af;
+    transition: 0.2s;
+    background: #fff;
+    padding: 0 4px;
+}
+
+/* FLOAT EFFECT */
+.input:focus + label,
+.input:not(:placeholder-shown) + label {
+    top: -8px;
+    font-size: 11px;
+    color: #111;
+}
+
+/* FOCUS */
+.input:focus {
+    border-color: #111;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.08);
+}
+
+/* PASSWORD ICON */
+.password-group i {
+    position: absolute;
+    right: 10px;
+    top: 14px;
+    cursor: pointer;
+    color: #9ca3af;
+}
+
+/* OPTIONS */
+.form-options {
+    text-align: right;
+    margin-bottom: 15px;
+}
+
+.form-options a {
+    font-size: 12px;
+    color: #6b7280;
+    text-decoration: none;
+}
+
+.form-options a:hover {
+    color: #111;
+}
+
+/* BUTTON */
+.btn-login {
+    width: 100%;
+    padding: 12px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-login:hover {
+    background: #333;
+    transform: translateY(-1px);
+}
+
+/* FOOTER */
+.register-text {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.register-text a {
+    color: #111;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.register-text a:hover {
+    text-decoration: underline;
+}
+
+/* ANIMATION */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.resend-section {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.resend-section p {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.resend-section a {
+    font-size: 13px;
+    color: #111;
+    text-decoration: none;
+}
+
+.resend-section a.disabled {
+    pointer-events: none;
+    color: #9ca3af;
+}
+
+
+/* ============================= */
+/* 📱 MOBILE (max 480px) */
+/* ============================= */
+@media (max-width: 480px) {
+
+    .login-card {
+        padding: 25px 18px;
+        border-radius: 10px;
+        box-shadow: none;
+        border: none;
+    }
+
+    .login-card h2 {
+        font-size: 20px;
+    }
+
+    .subtitle {
+        font-size: 12px;
+    }
+
+    .input {
+        font-size: 13px;
+        padding: 11px;
+    }
+
+    .btn-login {
+        font-size: 13px;
+        padding: 11px;
+    }
+
+    .register-text {
+        font-size: 12px;
+    }
+
+    .form-options a {
+        font-size: 11px;
+    }
+}
+
+/* ============================= */
+/* 📲 TABLET (481px - 768px) */
+/* ============================= */
+@media (min-width: 481px) and (max-width: 768px) {
+
+    .login-card {
+        max-width: 380px;
+        padding: 30px;
+    }
+
+    .login-card h2 {
+        font-size: 21px;
+    }
+}
+
+/* ============================= */
+/* 💻 SMALL LAPTOP (769px - 1024px) */
+/* ============================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    .login-card {
+        max-width: 420px;
+    }
+}
+
+/* ============================= */
+/* 🔥 EXTRA IMPROVEMENTS */
+/* ============================= */
+
+/* Better tap on mobile */
+.input,
+.btn-login {
+    min-height: 44px;
+}
+
+/* Prevent zoom on iOS */
+input {
+    font-size: 16px;
+}
+
+/* Smooth scaling */
+.login-card {
+    transition: all 0.3s ease;
+}
+
+.resend-section {
+    margin-top: 20px;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+}
+
+#timer {
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #555;
+}
+
+.resend-btn {
+    background-color: #ff6b00;      /* Orange color */
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    text-decoration: none;           /* Makes it look like a button-link */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;                        /* space between icon and text */
+}
+
+.resend-btn:hover:not(:disabled) {
+    background-color: #060606;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.resend-btn:disabled {
+    background-color: #161616;
+    opacity: 0.6;
+    cursor: not-allowed;
+}

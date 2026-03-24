@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/view_student.css') }}">
+
+<div class="student-profile-container">
+
+    {% if application %}
+    <!-- Profile Header -->
+    <div class="profile-header">
+        <div>
+            <h1 class="fw-bold">{{ application.full_name or "N/A" }}</h1>
+            <p class="text-muted">{{ application.email or "N/A" }}</p>
+        </div>
+        <div>
+            <a href="{{ url_for('company.applications') }}" class="btn btn-secondary btn-sm">
+                &larr; Back to Applications
+            </a>
+        </div>
+    </div>
+
+    <div class="profile-details">
+
+        <!-- Education -->
+        <div class="card">
+            <h4>Education</h4>
+            <p><strong>Degree:</strong> {{ application.degree or "N/A" }}</p>
+            <p><strong>College / University:</strong> {{ application.college or "N/A" }}</p>
+        </div>
+
+        <!-- Skills -->
+        <div class="card">
+            <h4>Skills</h4>
+            {% if application.skills %}
+                {% for skill in application.skills.split(',') %}
+                    <span class="skills-badge">{{ skill.strip() }}</span>
+                {% endfor %}
+            {% else %}
+                <p>N/A</p>
+            {% endif %}
+        </div>
+
+        <!-- Cover Letter -->
+        {% if application.cover_letter %}
+        <div class="card">
+            <h4>Cover Letter</h4>
+            <p>{{ application.cover_letter }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Resume -->
+        {% if application.resume %}
+        <div class="card">
+            <h4>Resume</h4>
+            <a href="{{ url_for('static', filename='uploads/resumes/' ~ application.resume) }}" 
+               target="_blank" class="btn btn-outline-primary btn-sm">
+                View Resume
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Applied Internship -->
+        {% if application.internship %}
+        <div class="card">
+            <h4>Applied Internship</h4>
+            <p><strong>Title:</strong> {{ application.internship.title or "N/A" }}</p>
+            <p>
+                <strong>Status:</strong>
+                <span class="status {{ application.status | lower }}">{{ application.status | capitalize }}</span>
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+
+    {% else %}
+    <div class="text-center text-muted py-5">
+        <p>No student application found.</p>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- <script>
+    // SweetAlert popup if alert_message exists
+    {% if alert_message %}
+    Swal.fire({
+        icon: 'warning',
+        title: 'Oops!',
+        text: '{{ alert_message }}',
+        confirmButtonText: 'Go to Applications'
+    }).then(() => {
+        window.location.href = "{{ url_for('company.applications') }}";
+    });
+    {% endif %}
+</script> -->
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Create Profile - SmartInternship{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/create_student_profile.css') }}">
+
+<div class="profile-wrapper">
+    <div class="profile-card">
+
+        <div class="icon-box">
+            {% if student.profile_pic %}
+                <img src="{{ url_for('static', filename='uploads/student_profile/' + student.profile_pic) }}" alt="Profile Picture">
+            {% else %}
+                <i class="fa-solid fa-user-graduate"></i>
+            {% endif %}
+        </div>
+
+        <h2 class="profile-title">Create Your Profile</h2>
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="full_name" value="{{ student.full_name or '' }}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" name="email" value="{{ student.email or '' }}" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>Degree</label>
+                <input type="text" name="degree" value="{{ student.degree or '' }}" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>College</label>
+                <input type="text" name="college" value="{{ student.college or '' }}" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Skills</label>
+                <input type="text" name="skills" value="{{ student.skills or '' }}" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label>Profile Picture</label>
+                <input type="file" name="profile_pic" class="form-control">
+            </div>
+
+            <button type="submit" class="btn-orange mt-3">Save Profile</button>
+        </form>
+
+    </div>
+</div>
+
+{% if request.args.get('profile_updated') == 'true' %}
+<script>
+    alert("Profile updated successfully!");
+</script>
+{% endif %}
+
+{% endblock %}
