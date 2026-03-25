@@ -49,7 +49,6 @@ env\Scripts\activate
 source env/bin/activate
 Install dependencies:
 pip install -r requirements.txt
-Run the app:
-python run.py
-Open in browser:
+Run the app: python app.py
+**Open in browser:**
 http://127.0.0.1:5000
