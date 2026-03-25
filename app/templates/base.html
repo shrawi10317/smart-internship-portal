@@ -18,7 +18,6 @@
 </head>
 
 <body class="{% block body_class %}{% endblock %} d-flex flex-column min-vh-100">
-
 <header>
   <div class="head_nav">
     <nav class="nav_sec">
@@ -148,63 +147,53 @@ Swal.fire({
 });
 </script>
 {% endif %}
-
 <script>
-// ================= HAMBURGER MENU =================
+// Select elements
 const hamburger = document.getElementById("hamburger");
 const menu = document.querySelector(".menu");
 const overlay = document.getElementById("overlay");
 
-if (hamburger) {
-    hamburger.addEventListener("click", () => {
-        hamburger.classList.toggle("active");
-        menu.classList.toggle("show");
-        overlay.classList.toggle("active");
-    });
+// Function to close menu
+function closeMenu() {
+    hamburger.classList.remove("active");
+    menu.classList.remove("show");
+    overlay.classList.remove("active");
 }
 
-// Close menu when clicking overlay
-if (overlay) {
-    overlay.addEventListener("click", () => {
-        hamburger.classList.remove("active");
-        menu.classList.remove("show");
-        overlay.classList.remove("active");
-    });
-}
-
-// Close menu on link click (mobile)
-document.querySelectorAll(".menu a").forEach(link => {
-    link.addEventListener("click", () => {
-        hamburger.classList.remove("active");
-        menu.classList.remove("show");
-        overlay.classList.remove("active");
-    });
+// Hamburger click
+hamburger.addEventListener("click", () => {
+    hamburger.classList.toggle("active");
+    menu.classList.toggle("show");
+    overlay.classList.toggle("active");
 });
 
+// Overlay click closes menu
+overlay.addEventListener("click", closeMenu);
 
-// ================= DROPDOWN CLICK FIX =================
+// Close menu after clicking any menu link (let <a> handle navigation)
+document.querySelectorAll(".menu a").forEach(link => {
+    link.addEventListener("click", closeMenu);
+});
+
+// Mobile dropdown toggle
 document.querySelectorAll(".dropbtn").forEach(btn => {
-    btn.addEventListener("click", function (e) {
+    btn.addEventListener("click", e => {
         e.preventDefault();
         e.stopPropagation();
 
-        const parent = this.parentElement;
-
-        // Toggle current dropdown
+        const parent = btn.parentElement;
         parent.classList.toggle("show");
 
-        // Close others
+        // Close other dropdowns
         document.querySelectorAll(".dropdown").forEach(d => {
-            if (d !== parent) d.classList.remove("show");
+            if(d !== parent) d.classList.remove("show");
         });
     });
 });
 
-// Close dropdown when clicking outside
+// Close dropdowns if clicked outside
 document.addEventListener("click", () => {
-    document.querySelectorAll(".dropdown").forEach(d => {
-        d.classList.remove("show");
-    });
+    document.querySelectorAll(".dropdown").forEach(d => d.classList.remove("show"));
 });
 </script>
 </body>
