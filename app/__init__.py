@@ -8,7 +8,7 @@ mail =Mail()
 def create_app():
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = 'secret123'
+    app.config['SECRET_KEY'] = 'your_secret_key'
     app.config.from_object("config.Config")
 
     # IMPORTANT: import models
@@ -18,8 +18,8 @@ def create_app():
     app.config["MAIL_SERVER"] = "smtp.gmail.com"
     app.config["MAIL_PORT"] = 587
     app.config["MAIL_USE_TLS"] = True
-    app.config["MAIL_USERNAME"] = "shrawaniofficial6@gmail.com"
-    app.config["MAIL_PASSWORD"] = "mrgzzncdjpzckcwi"
+    app.config["MAIL_USERNAME"] = "your_email"
+    app.config["MAIL_PASSWORD"] = "your_password"
 
     db.init_app(app)
     mail.init_app(app)   # ✅ initialize mail
