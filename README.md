@@ -32,24 +32,6 @@ A responsive web application to browse, apply, and manage internships efficientl
 
 ---
 
-## 📁 Project Structure
-
-
-smart_internship_portal/
-├─ app/
-│ ├─ templates/
-│ ├─ static/
-│ │ ├─ css/
-│ │ ├─ js/
-│ │ └─ uploads/
-│ ├─ routes/
-│ └─ init.py
-├─ env/ # Python virtual environment
-├─ requirements.txt
-├─ run.py
-└─ README.md
-
-
 ---
 
 ## ⚙️ Installation
