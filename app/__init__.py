@@ -13,7 +13,7 @@ load_dotenv()
 def create_app():
     app = Flask(__name__)
 
-    app.config['SECRET_KEY'] = 'your_secret_key'
+    app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
     app.config.from_object("config.Config")
 
     # IMPORTANT: import models
