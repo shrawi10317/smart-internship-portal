@@ -1,9 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
+import os
+from dotenv import load_dotenv
+
 
 db = SQLAlchemy()
 mail =Mail()
+
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
@@ -17,9 +22,9 @@ def create_app():
     # MAIL CONFIG
     app.config["MAIL_SERVER"] = "smtp.gmail.com"
     app.config["MAIL_PORT"] = 587
-    app.config["MAIL_USE_TLS"] = True
-    app.config["MAIL_USERNAME"] = "your_email"
-    app.config["MAIL_PASSWORD"] = "your_password"
+    app.config["MAIL_USE_TLS"] = True  
+    app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
+    app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
 
     db.init_app(app)
     mail.init_app(app)   # ✅ initialize mail
