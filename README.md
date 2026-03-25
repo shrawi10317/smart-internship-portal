@@ -15,9 +15,10 @@ A responsive web application to browse, apply, and manage internships efficientl
 - Companies can:
   - Post internships
   - View applicant details
+  - Accept and reject the application of students.
+  - sent email to student about thier internship status (accept or reject) .
 - Responsive UI with mobile-friendly **hamburger menu**  
 - Interactive hero slider on the landing page  
-- LinkedIn-style profile navigation  
 - Secure password handling and session management
 
 ---
