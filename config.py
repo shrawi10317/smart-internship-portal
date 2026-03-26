@@ -1,23 +1,19 @@
 import os
+from pathlib import Path
+
+basedir = Path(__file__).resolve().parent
 
 class Config:
-    # Absolute path to instance folder (writable)
-    BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "instance"))
+    SECRET_KEY = os.environ.get("SECRET_KEY", "my_secret_key")
     
-    # Ensure instance folder exists
-    if not os.path.exists(BASE_DIR):
-        os.makedirs(BASE_DIR)
+    db_folder = basedir / "instance"
+    os.makedirs(db_folder, exist_ok=True)
 
-    # SQLite database
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or \
-        "sqlite:///" + os.path.join(BASE_DIR, "internship_portal.db")
-    
+    db_path = db_folder / "internship_portal.db"
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{db_path.as_posix()}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # Secret key
-    SECRET_KEY = os.environ.get("SECRET_KEY") or "dev_secret_key_!@#1234567890"
-
-    # Mail configuration
+    # Flask-Mail
     MAIL_SERVER = "smtp.gmail.com"
     MAIL_PORT = 587
     MAIL_USE_TLS = True

@@ -1,11 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
-from dotenv import load_dotenv
 import os
-
-# Load .env locally
-load_dotenv()
 
 db = SQLAlchemy()
 mail = Mail()
@@ -20,7 +16,7 @@ def create_app():
     db.init_app(app)
     mail.init_app(app)
 
-    # Import models
+    # Import models (make sure you have models.py)
     from . import models
 
     # Register blueprints
@@ -36,7 +32,7 @@ def create_app():
     from .routes.company_routes import company
     app.register_blueprint(company)
 
-    # Test email route (optional)
+    # Test email route
     @app.route("/test_email")
     def test_email():
         from flask_mail import Message

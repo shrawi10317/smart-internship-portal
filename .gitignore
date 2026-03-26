@@ -1,3 +1,32 @@
-.env
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.swp
+*.sqlite3
+*.db
+
+# Virtual Environment
+env/
+.venv/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Flask instance folder (optional: commit DB only if needed)
+instance/*.db
+
+# dotenv file
+.env
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log

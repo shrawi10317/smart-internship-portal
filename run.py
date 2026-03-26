@@ -1,18 +1,17 @@
 from app import create_app, db
-import os
-
-# Ensure instance folder exists
-instance_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "instance")
-if not os.path.exists(instance_path):
-    os.makedirs(instance_path)
 
 app = create_app()
 
-# Create tables
-with app.app_context():
-    db.create_all()
+# Ensure instance folder exists (safety check)
+import os
+instance_path = os.path.join(app.root_path, "instance")
+os.makedirs(instance_path, exist_ok=True)
 
-# Disable caching
+with app.app_context():
+    print("Creating DB at:", app.config['SQLALCHEMY_DATABASE_URI'])
+    db.create_all()  # Creates SQLite DB if it doesn't exist
+
+# Disable caching for dev
 @app.after_request
 def add_header(response):
     response.cache_control.no_store = True
@@ -23,4 +22,4 @@ def add_header(response):
     return response
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(host="0.0.0.0", port=5000, debug=True)
