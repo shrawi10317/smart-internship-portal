@@ -7,7 +7,18 @@ from app.models.whishlist import Wishlist
 from flask_mail import Message
 from app import mail
 from app import db
+from flask import current_app
+
+import threading
 main = Blueprint('main', __name__)
+
+def send_async_email(app, msg):
+    with app.app_context():
+        try:
+            mail.send(msg)
+            print("✅ Email sent")
+        except Exception as e:
+            print("❌ Mail Error:", e)
 
 @main.route("/")
 def home():
@@ -152,7 +163,10 @@ def contact():
 
         # Send the email
         try:
-            mail.send(msg)
+            threading.Thread(
+            target=send_async_email,
+            args=(current_app._get_current_object(), msg)
+             ).start()
             # Redirect with success query parameter instead of flash
             return redirect(url_for("main.contact", sent="true"))
         except Exception as e:

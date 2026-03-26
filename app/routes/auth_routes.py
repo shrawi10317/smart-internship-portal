@@ -10,11 +10,23 @@ from app.models.user import User
 from flask_mail import Message
 import random
 from app import mail
-from flask import app
+from flask import current_app
+
+import threading
+
+
 
 
 
 auth_main=Blueprint('auth_main',__name__)
+
+def send_async_email(app, msg):
+    with app.app_context():
+        try:
+            mail.send(msg)
+            print("✅ Email sent")
+        except Exception as e:
+            print("❌ Mail Error:", e)
 
 @auth_main.route("/register", methods=["GET","POST"])
 def register():
@@ -61,7 +73,10 @@ def register():
         )
         msg.body = f"Your OTP is: {otp}"
 
-        mail.send(msg)
+        threading.Thread(
+        target=send_async_email,
+        args=(current_app._get_current_object(), msg)
+         ).start()
 
         return redirect(url_for("auth_main.verify_otp"))
 
@@ -190,7 +205,10 @@ def forgot_password():
                        )
 
                 msg.body = f"Your OTP is: {otp}"
-                mail.send(msg)
+                threading.Thread(
+                target=send_async_email,
+                args=(current_app._get_current_object(), msg)
+                ).start()
 
                 message = "OTP sent to your email 📧"
                 show_otp = True
@@ -293,7 +311,10 @@ def resend_otp():
         recipients=[user.email]
     )
     msg.body = f"Hello {user.name}, your new OTP is: {otp}"
-    mail.send(msg)
+    threading.Thread(
+        target=send_async_email,
+        args=(current_app._get_current_object(), msg)
+         ).start()
 
     # Redirect back to verify OTP page with popup
     return redirect(url_for("auth_main.verify_otp", otp_sent="true"))
