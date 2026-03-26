@@ -3,7 +3,8 @@ import os
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
+    # Use DATABASE_URL from env if set; else fallback to instance folder
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or \
-        "sqlite:///" + os.path.join(BASE_DIR, "internship_portal.db")
+        "sqlite:///" + os.path.join(BASE_DIR, "instance", "internship_portal.db")
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
