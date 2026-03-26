@@ -2,17 +2,17 @@ from app import create_app, db
 import os
 
 # Ensure instance folder exists
-if not os.path.exists("instance"):
-    os.makedirs("instance")
+instance_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "instance")
+if not os.path.exists(instance_path):
+    os.makedirs(instance_path)
 
-# Create Flask app
 app = create_app()
 
-# Create all database tables if they don't exist
+# Create tables
 with app.app_context():
     db.create_all()
 
-# Disable caching for dynamic pages
+# Disable caching
 @app.after_request
 def add_header(response):
     response.cache_control.no_store = True
@@ -23,6 +23,4 @@ def add_header(response):
     return response
 
 if __name__ == "__main__":
-    # Use 0.0.0.0 and PORT environment variable for deployment
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=False)
+    app.run(host="0.0.0.0", port=5000, debug=False)

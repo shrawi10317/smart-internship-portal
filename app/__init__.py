@@ -4,29 +4,17 @@ from flask_mail import Mail
 from dotenv import load_dotenv
 import os
 
+# Load .env locally
+load_dotenv()
+
 db = SQLAlchemy()
 mail = Mail()
 
 def create_app():
-    # Create Flask app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__)
 
-    # Load default config
+    # Load config
     app.config.from_object("config.Config")
-
-    # Load .env file (for local development)
-    load_dotenv()
-
-    # SECRET KEY
-    app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY") or "dev_secret_key_!@#1234567890"
-
-    # MAIL CONFIG (works locally and in deployment)
-    app.config["MAIL_SERVER"] = "smtp.gmail.com"
-    app.config["MAIL_PORT"] = 587
-    app.config["MAIL_USE_TLS"] = True
-    app.config["MAIL_USE_SSL"] = False
-    app.config["MAIL_USERNAME"] = os.environ.get("MAIL_USERNAME")
-    app.config["MAIL_PASSWORD"] = os.environ.get("MAIL_PASSWORD")
 
     # Initialize extensions
     db.init_app(app)
@@ -48,7 +36,7 @@ def create_app():
     from .routes.company_routes import company
     app.register_blueprint(company)
 
-    # Optional: test email route
+    # Test email route (optional)
     @app.route("/test_email")
     def test_email():
         from flask_mail import Message
