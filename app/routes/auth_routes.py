@@ -327,3 +327,34 @@ def resend_otp():
 
     # Redirect back to verify OTP page with popup
     return redirect(url_for("auth_main.verify_otp", otp_sent="true"))
+
+
+
+
+
+    # test route
+@auth_main.route("/init-test-user")
+def init_test_user():
+    try:
+        # 🔍 Check if user already exists
+        user = User.query.filter_by(email="autotest@gmail.com").first()
+
+        if not user:
+            new_user = User(
+                name="Auto Test User",   # ✅ correct column
+                email="autotest@gmail.com",
+                password=generate_password_hash("123456"),
+                role="student",
+                is_verified=True        # optional but useful
+            )
+
+            db.session.add(new_user)
+            db.session.commit()
+
+            return "✅ Test user created successfully!"
+
+        return "⚠️ User already exists!"
+
+    except Exception as e:
+        db.session.rollback()
+        return f"❌ Error: {str(e)}"
