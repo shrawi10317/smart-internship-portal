@@ -7,7 +7,8 @@ from app.models.whishlist import Wishlist
 # from flask_mail import Message
 # from app import mail
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+from sendgrid.helpers.mail import Mail,Email
+import time
 import os
 from app import db
 from flask import current_app
@@ -15,28 +16,36 @@ from flask import current_app
 import threading
 main = Blueprint('main', __name__)
 
-def send_email(to_email, subject, content):
-    """Send an email using SendGrid (async-friendly with threading)."""
-    def _send():
-        try:
-            sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
-            message = Mail(
-                from_email=("Smart Internship", "shrawaniofficial6@gmail.com"),
-                to_emails=to_email,
-                subject=subject,
-                html_content=content
-            )
-            message.reply_to = "shrawaniofficial6@gmail.com"
-            sg.send(message)
-            print(f"✅ Email sent to {to_email}")
+import threading
 
-        except Exception as e:
-            import traceback
-            print("❌ Email sending failed:")
-            print(traceback.format_exc())
+def send_email(to_email, subject, content, retries=3, delay=5):
+    """Send email via SendGrid asynchronously with retry logic."""
 
-    # Run email sending in background thread
-    threading.Thread(target=_send).start()
+
+    def send():
+        for attempt in range(1, retries + 1):
+            try:
+                sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+                message = Mail(
+                    from_email=Email(os.environ.get("MAIL_USERNAME"), "Smart Internship"),
+                    to_emails=to_email,
+                    subject=subject,
+                    html_content=content
+                )
+                message.reply_to = Email(os.environ.get("MAIL_USERNAME"), "Smart Internship")
+                response = sg.send(message)
+                print(f"✅ Email sent to {to_email}, Status: {response.status_code}")
+                break
+            except Exception as e:
+                print(f"❌ Attempt {attempt} failed: {str(e)}")
+                if attempt < retries:
+                    print(f"⏳ Retrying in {delay} seconds...")
+                    time.sleep(delay)
+                else:
+                    print(f"❌ Failed to send email after {retries} attempts.")
+
+    # Run in a separate thread to avoid blocking
+    threading.Thread(target=send).start()
 
 @main.route("/")
 def home():
@@ -150,6 +159,10 @@ def companies():
 def about():
     return render_template("about_us.html")
 
+from flask import Blueprint, render_template, request, redirect, url_for
+
+main = Blueprint('main', __name__)
+
 @main.route("/contact", methods=["GET", "POST"])
 def contact():
     sent = request.args.get("sent")
@@ -176,20 +189,17 @@ def contact():
         """
 
         try:
-            # send asynchronously
             send_email(
-                "shrawaniofficial6@gmail.com",
+                "shrawaniofficial6@gmail.com",  # ✅ your verified email
                 "New Contact Message - SmartInternship",
                 html_content
             )
-            # Redirect to GET so page can show success message
             return redirect(url_for("main.contact", sent="true"))
 
         except Exception as e:
             return redirect(url_for("main.contact", error=str(e)))
 
     return render_template("contact.html", sent=sent, error=error)
-
 
 # student.py (or main routes)
 
@@ -288,17 +298,17 @@ def internship_detail(id):
 
 @main.route("/test-email")
 def test_email():
+    """Route to send a test email to shrawaniw03@gmail.com"""
     try:
-        # Send email asynchronously using the same send_email function
         send_email(
             "shrawaniw03@gmail.com",
-            "Test Email - SmartInternship",
-            "<h2>🚀 Test Email Working from Render!</h2><p>If you see this, SendGrid is working.</p>"
+            "🚀 Test Email from SmartInternship",
+            """
+            <h2 style='color:#ff6b00;'>SendGrid Test Email</h2>
+            <p>If you see this message, SendGrid email is working correctly!</p>
+            """
         )
-
-        # Immediate response to the browser
         return "<h3>✅ Test email sent! Check your inbox (or spam) shortly.</h3>"
-
     except Exception as e:
         import traceback
         return f"<h3>❌ Test email failed:</h3><pre>{traceback.format_exc()}</pre>"

@@ -16,34 +16,44 @@ from flask import current_app
 from datetime import datetime, timedelta
 # from app import mail
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+from sendgrid.helpers.mail import Mail,Email
 from sqlalchemy import func
 from functools import wraps
 from flask import session, redirect, url_for
 from app.utils.decorators import login_required
 import threading
+import os
+import time
 
 company = Blueprint("company",__name__,url_prefix="/company")
 
-def send_email(to_email, subject, content):
-    try:
-        sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+def send_email(to_email, subject, content, retries=3, delay=5):
+    """
+    Send email via SendGrid API with retry logic.
+    """
 
-        message = Mail(
-            from_email=("Smart Internship", "shrawaniofficial6@gmail.com"),
-            to_emails=to_email,
-            subject=subject,
-            html_content=content
-        )
+    message = Mail(
+        from_email=Email(os.environ.get("MAIL_USERNAME"), "Smart Internship"),  # Verified Gmail
+        to_emails=to_email,
+        subject=subject,
+        html_content=content
+    )
 
-        # 🔥 IMPORTANT (Gmail trust fix)
-        message.reply_to = "shrawaniofficial6@gmail.com"
+    message.reply_to = Email(os.environ.get("MAIL_USERNAME"), "Smart Internship")
 
-        sg.send(message)
-        print(f"✅ Email sent to {to_email}")
-
-    except Exception as e:
-        print(f"❌ Email error: {str(e)}")
+    for attempt in range(1, retries + 1):
+        try:
+            sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+            response = sg.send(message)
+            print(f"✅ Email sent to {to_email}, Status Code: {response.status_code}")
+            return True
+        except Exception as e:
+            print(f"❌ Attempt {attempt} failed: {str(e)}")
+            if attempt < retries:
+                print(f"⏳ Retrying in {delay} seconds...")
+                time.sleep(delay)
+            else:
+                return False
 
 # ================= Decorator =================
 # Decorator to ensure company profile exists and is complete

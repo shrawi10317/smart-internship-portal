@@ -23,24 +23,32 @@ import threading
 
 auth_main=Blueprint('auth_main',__name__)
 
-def send_email(to_email, subject, content):
-    try:
-        sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+def send_email(to_email, subject, content, retries=3, delay=5):
+    """
+    Send email via SendGrid API with retry logic.
+    """
 
-        message = Mail(
-            from_email=Email("shrawaniofficial6@gmail.com", "Smart Internship"),
-            to_emails=to_email,
-            subject=subject,
-            html_content=content
-        )
 
-        message.reply_to = Email("shrawaniofficial6@gmail.com", "Smart Internship")
+    message = Mail(
+        from_email=os.environ.get("MAIL_USERNAME"),  # verified Gmail in SendGrid
+        to_emails=to_email,
+        subject=subject,
+        html_content=content
+    )
 
-        response = sg.send(message)
-        print(f"✅ Email sent to {to_email}, Status Code: {response.status_code}")
-
-    except Exception as e:
-        print(f"❌ Email error: {str(e)}")
+    for attempt in range(1, retries + 1):
+        try:
+            sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+            response = sg.send(message)
+            print(f"✅ Email sent to {to_email}, Status Code: {response.status_code}")
+            return True
+        except Exception as e:
+            print(f"❌ Attempt {attempt} failed: {str(e)}")
+            if attempt < retries:
+                print(f"⏳ Retrying in {delay} seconds...")
+                time.sleep(delay)
+            else:
+                return False
     
 
 @auth_main.route("/register", methods=["GET","POST"])
