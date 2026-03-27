@@ -24,9 +24,8 @@ class Config:
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # ----------------- MAIL -----------------
-    # ----------------- SENDGRID -----------------
-    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+    # ----------------- SENDGRID ----------------- 
+    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY") 
     DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "shrawaniofficial6@gmail.com")
     # ----------------- OTHER -----------------
     DEBUG = os.environ.get("FLASK_DEBUG", "1") == "1"

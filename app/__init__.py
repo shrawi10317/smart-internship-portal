@@ -29,16 +29,16 @@ def create_app():
     db.init_app(app)
     mail.init_app(app)
 
-     # ----------------- BLUEPRINTS -----------------
+    # ----------------- BLUEPRINTS -----------------
     from app.routes.auth_routes import auth_main
     from app.routes.student_routes import student
     from app.routes.company_routes import company
     from app.routes.main_routes import main
 
-    app.register_blueprint(auth_main, url_prefix="/auth")
-    app.register_blueprint(student, url_prefix="/student")
-    app.register_blueprint(company, url_prefix="/company")
-    app.register_blueprint(main)  # main routes on root
+    app.register_blueprint(auth_main)
+    app.register_blueprint(student)
+    app.register_blueprint(company)
+    app.register_blueprint(main)
 
     # ----------------- ERROR HANDLERS -----------------
     @app.errorhandler(404)
@@ -49,9 +49,9 @@ def create_app():
     def internal_error(e):
         return "Internal server error 500", 500
 
-    # ----------------- CREATE DATABASE -----------------
+    # ----------------- CREATE DATABASE IF NOT EXISTS -----------------
     with app.app_context():
+        print("Creating database at:", app.config['SQLALCHEMY_DATABASE_URI'])
         db.create_all()
-        print("✅ Database ready at:", app.config['SQLALCHEMY_DATABASE_URI'])
 
     return app

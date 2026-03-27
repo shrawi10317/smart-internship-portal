@@ -1,27 +1,22 @@
-from flask import Blueprint, render_template,session,flash,redirect,url_for,request
+from flask import Blueprint, render_template, session, flash, redirect, url_for, request
 from app.models.internship import Internship
 from app.models.application import Application
 from app.models.company import Company
 from app.models.whishlist import Wishlist
-# from app.routes.company_routes import dashboard
-# from flask_mail import Message
-# from app import mail
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail,Email
+from sendgrid.helpers.mail import Mail, Email
 import time
 import os
 from app import db
 from flask import current_app
-
 import threading
+
+# ------------------- BLUEPRINT -------------------
 main = Blueprint('main', __name__)
 
-import threading
-
+# ------------------- SEND EMAIL FUNCTION -------------------
 def send_email(to_email, subject, content, retries=3, delay=5):
     """Send email via SendGrid asynchronously with retry logic."""
-
-
     def send():
         for attempt in range(1, retries + 1):
             try:
@@ -44,12 +39,12 @@ def send_email(to_email, subject, content, retries=3, delay=5):
                 else:
                     print(f"❌ Failed to send email after {retries} attempts.")
 
-    # Run in a separate thread to avoid blocking
     threading.Thread(target=send).start()
+
+# ------------------- ROUTES -------------------
 
 @main.route("/")
 def home():
-    # Pop message safely
     logout_message = session.pop('logout_message', None)
 
     if "user_id" in session:
@@ -67,7 +62,6 @@ def apply_redirect():
 
 @main.route("/internships")
 def internships():
-
     search = request.args.get("search")
     location = request.args.get("location")
     duration = request.args.get("duration")
@@ -78,11 +72,8 @@ def internships():
     # 🔍 FILTERS
     if search:
         query = query.filter(Internship.title.ilike(f"%{search}%"))
-
     if location:
         query = query.filter(Internship.location == location)
-
-    # ✅ FIXED DURATION FILTER
     if duration:
         query = query.filter(Internship.duration == duration)
 
@@ -113,13 +104,9 @@ def internships():
         applied = Application.query.filter_by(student_id=user_id).all()
         applied_ids = [a.internship_id for a in applied]
 
-    # 📍 DISTINCT LOCATIONS
-    locations = db.session.query(Internship.location).distinct().all()
-    locations = [loc[0] for loc in locations]
-
-    # ⏱ DISTINCT DURATIONS
-    durations = db.session.query(Internship.duration).distinct().all()
-    durations = [dur[0] for dur in durations]
+    # 📍 DISTINCT LOCATIONS & DURATIONS
+    locations = [loc[0] for loc in db.session.query(Internship.location).distinct().all()]
+    durations = [dur[0] for dur in db.session.query(Internship.duration).distinct().all()]
 
     return render_template(
         "internships.html",
@@ -129,7 +116,6 @@ def internships():
         locations=locations,
         durations=durations
     )
-
 
 @main.route("/companies")
 def companies():
@@ -154,14 +140,9 @@ def companies():
         location=location
     )
 
-
 @main.route("/about")
 def about():
     return render_template("about_us.html")
-
-from flask import Blueprint, render_template, request, redirect, url_for
-
-main = Blueprint('main', __name__)
 
 @main.route("/contact", methods=["GET", "POST"])
 def contact():
@@ -190,19 +171,17 @@ def contact():
 
         try:
             send_email(
-                "shrawaniofficial6@gmail.com",  # ✅ your verified email
+                "shrawaniofficial6@gmail.com",
                 "New Contact Message - SmartInternship",
                 html_content
             )
             return redirect(url_for("main.contact", sent="true"))
-
         except Exception as e:
             return redirect(url_for("main.contact", error=str(e)))
 
     return render_template("contact.html", sent=sent, error=error)
 
-# student.py (or main routes)
-
+# ------------------- WISHLIST -------------------
 @main.route("/toggle-wishlist/<int:id>")
 def toggle_wishlist(id):
     if session.get("role") != "student":
@@ -210,38 +189,28 @@ def toggle_wishlist(id):
 
     user_id = session.get("user_id")
 
-    existing = Wishlist.query.filter_by(
-        student_id=user_id,
-        internship_id=id
-    ).first()
+    existing = Wishlist.query.filter_by(student_id=user_id, internship_id=id).first()
 
     if existing:
         db.session.delete(existing)
     else:
-        new_item = Wishlist(
-            student_id=user_id,
-            internship_id=id
-        )
+        new_item = Wishlist(student_id=user_id, internship_id=id)
         db.session.add(new_item)
 
     db.session.commit()
     return redirect(request.referrer)
 
+# ------------------- COMPANY DETAILS -------------------
 @main.route("/company/<int:id>")
 def company_details(id):
-
     company = Company.query.get_or_404(id)
-
     internships = Internship.query.filter_by(company_id=id).all()
-
     applied_ids = []
 
     if session.get("user_id"):
         applied_ids = [
             a.internship_id
-            for a in Application.query.filter_by(
-                student_id=session.get("user_id")   # ✅ FIXED HERE
-            ).all()
+            for a in Application.query.filter_by(student_id=session.get("user_id")).all()
         ]
 
     return render_template(
@@ -251,39 +220,30 @@ def company_details(id):
         applied_ids=applied_ids
     )
 
+# ------------------- INTERNSHIP DETAILS -------------------
 @main.route("/internship/<int:id>")
 def internship_detail(id):
-
     internship = Internship.query.get_or_404(id)
 
-    # 📊 Apply count
     apply_count = Application.query.filter_by(internship_id=id).count()
 
-    # ❤️ Wishlist & Applied
     wishlist_ids = []
     applied_ids = []
 
     if session.get("role") == "student":
         user_id = session.get("user_id")
-
         wishlist = Wishlist.query.filter_by(student_id=user_id).all()
         wishlist_ids = [w.internship_id for w in wishlist]
-
         applied = Application.query.filter_by(student_id=user_id).all()
         applied_ids = [a.internship_id for a in applied]
 
-    # 🔥 GET SKILLS FROM APPLICATION TABLE
     applications = Application.query.filter_by(internship_id=id).all()
-
     skills_list = []
-
     for app in applications:
         if app.skills:
             for skill in app.skills.split(','):
                 if skill.strip():
                     skills_list.append(skill.strip())
-
-    # remove duplicates
     skills_list = list(set(skills_list))
 
     return render_template(
@@ -292,13 +252,12 @@ def internship_detail(id):
         apply_count=apply_count,
         wishlist_ids=wishlist_ids,
         applied_ids=applied_ids,
-        skills_list=skills_list   # ✅ PASS
+        skills_list=skills_list
     )
 
-
+# ------------------- TEST EMAIL -------------------
 @main.route("/test-email")
 def test_email():
-    """Route to send a test email to shrawaniw03@gmail.com"""
     try:
         send_email(
             "shrawaniw03@gmail.com",
@@ -313,7 +272,7 @@ def test_email():
         import traceback
         return f"<h3>❌ Test email failed:</h3><pre>{traceback.format_exc()}</pre>"
 
-
+# ------------------- PING -------------------
 @main.route("/ping")
 def ping():
     return "pong ✅"
