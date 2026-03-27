@@ -368,7 +368,7 @@ def test_email():
     try:
         msg = Message(
             subject="Test Email",
-            recipients=["your_email@gmail.com"],
+            recipients=["shrawaniofficial6@gmail.com"],
             body="If you get this, email is working!"
         )
 
