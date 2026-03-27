@@ -13,19 +13,18 @@ class Config:
 
     DATABASE_URL = os.environ.get("DATABASE_URL")
 
-    # ✅ Fix for Render PostgreSQL
     if DATABASE_URL:
         if DATABASE_URL.startswith("postgres://"):
             DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
         SQLALCHEMY_DATABASE_URI = DATABASE_URL
     else:
-        # Local fallback
         SQLALCHEMY_DATABASE_URI = f"sqlite:///{DB_PATH}"
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # ----------------- SENDGRID ----------------- 
+    # ----------------- SENDGRID -----------------
     SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY") 
     DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "shrawaniofficial6@gmail.com")
+
     # ----------------- OTHER -----------------
-    DEBUG = os.environ.get("FLASK_DEBUG", "1") == "1"
+    DEBUG = os.environ.get("FLASK_DEBUG", "0") == "1"  # production default 0

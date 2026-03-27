@@ -1,10 +1,8 @@
-# app/__init__.py
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 
-# Initialize extensions
 db = SQLAlchemy()
 mail = Mail()
 
@@ -18,12 +16,12 @@ def create_app():
     # Ensure instance folder exists
     os.makedirs(app.instance_path, exist_ok=True)
 
-    # Ensure database folder exists (for SQLite)
+    # Only create SQLite folder locally
     db_uri = app.config.get("SQLALCHEMY_DATABASE_URI", "")
     if db_uri.startswith("sqlite:///"):
         db_file = db_uri.replace("sqlite:///", "")
         db_dir = os.path.dirname(db_file)
-        os.makedirs(db_dir, exist_ok=True)  # Very important for deployment
+        os.makedirs(db_dir, exist_ok=True)
 
     # Initialize extensions
     db.init_app(app)
@@ -49,9 +47,13 @@ def create_app():
     def internal_error(e):
         return "Internal server error 500", 500
 
-    # ----------------- CREATE DATABASE IF NOT EXISTS -----------------
+    # ----------------- DATABASE CREATION -----------------
     with app.app_context():
-        print("Creating database at:", app.config['SQLALCHEMY_DATABASE_URI'])
-        db.create_all()
+        # For PostgreSQL (Heroku), db.create_all() will still work
+        try:
+            print("Creating database at:", app.config['SQLALCHEMY_DATABASE_URI'])
+            db.create_all()
+        except Exception as e:
+            print("⚠️ Database creation skipped:", str(e))
 
     return app
