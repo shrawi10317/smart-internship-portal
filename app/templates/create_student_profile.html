@@ -8,13 +8,19 @@
 <div class="profile-wrapper">
     <div class="profile-card">
 
-        <div class="icon-box">
-            {% if student.profile_pic %}
-                <img src="{{ url_for('static', filename='uploads/student_profile/' + student.profile_pic) }}" alt="Profile Picture">
-            {% else %}
-                <i class="fa-solid fa-user-graduate"></i>
-            {% endif %}
-        </div>
+     <div class="icon-box">
+    {% if student.profile_pic %}
+        <img 
+            src="{{ url_for('static', filename='uploads/student_profile/' + student.profile_pic) }}?v={{ range(1,10000)|random }}" 
+            alt="Profile Picture"
+            width="150"
+            height="150"
+            style="border-radius:50%; object-fit:cover;"
+        >
+    {% else %}
+        <i class="fa-solid fa-user-graduate"></i>
+    {% endif %}
+</div>
 
         <h2 class="profile-title">Create Your Profile</h2>
 

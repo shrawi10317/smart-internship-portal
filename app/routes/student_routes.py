@@ -156,54 +156,61 @@ def apply_internship(id):
         internship=internship
     )
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_FOLDER = os.path.join(BASE_DIR, "static/uploads/student_profile")
+
+# ✅ Correct BASE DIR (project root)
+BASE_DIR = os.getcwd()
+
+# ✅ Correct upload folder (must match static path)
+UPLOAD_FOLDER = os.path.join(BASE_DIR, "app/static/uploads/student_profile")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+
 @student.route("/create_profile", methods=["GET", "POST"])
 @login_required(role="student")
 def create_profile():
 
-    print(request.files)
-
     if session.get("role") != "student":
         return redirect(url_for("auth_main.login"))
 
-    student = Student.query.filter_by(user_id=session["user_id"]).first()
+    student_obj = Student.query.filter_by(user_id=session["user_id"]).first()
 
-    if not student:
-        student = Student(
-            user_id=session["user_id"]
-        )
-        db.session.add(student)
+    if not student_obj:
+        student_obj = Student(user_id=session["user_id"])
+        db.session.add(student_obj)
         db.session.commit()
 
     if request.method == "POST":
 
-        student.full_name = request.form.get("full_name")
-        student.email = request.form.get("email")
-        student.degree = request.form.get("degree")
-        student.college = request.form.get("college")
-        student.skills = request.form.get("skills")
+        # ✅ Save form data
+        student_obj.full_name = request.form.get("full_name")
+        student_obj.email = request.form.get("email")
+        student_obj.degree = request.form.get("degree")
+        student_obj.college = request.form.get("college")
+        student_obj.skills = request.form.get("skills")
 
+        # ✅ Handle file upload
         profile_pic_file = request.files.get("profile_pic")
 
         if profile_pic_file and profile_pic_file.filename != "":
             filename = str(uuid.uuid4()) + "_" + secure_filename(profile_pic_file.filename)
 
-            profile_path = os.path.join(UPLOAD_FOLDER, filename)
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
 
-            # 🔥 DEBUG (optional)
-            print("Saving image to:", profile_path)
+            print("Saving image to:", file_path)  # DEBUG
 
-            profile_pic_file.save(profile_path)
+            profile_pic_file.save(file_path)
 
-            student.profile_pic = filename
+            # ✅ Save filename in DB
+            student_obj.profile_pic = filename
+
+            print("Saved filename:", filename)  # DEBUG
 
         db.session.commit()
 
-        return redirect(url_for("student.dashboard", profile_updated="true"))
+        # ✅ IMPORTANT FIX: reload same page
+        return redirect(url_for("student.create_profile", profile_updated="true"))
 
-    return render_template("create_student_profile.html", student=student)
+    return render_template("create_student_profile.html", student=student_obj)
 
 
 @student.route("/profile", methods=["GET", "POST"])
