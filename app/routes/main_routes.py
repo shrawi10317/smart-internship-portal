@@ -4,21 +4,33 @@ from app.models.application import Application
 from app.models.company import Company
 from app.models.whishlist import Wishlist
 # from app.routes.company_routes import dashboard
-from flask_mail import Message
-from app import mail
+# from flask_mail import Message
+# from app import mail
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+import os
 from app import db
 from flask import current_app
 
 import threading
 main = Blueprint('main', __name__)
 
-def send_async_email(app, msg):
-    with app.app_context():
-        try:
-            mail.send(msg)
-            print("✅ Email sent")
-        except Exception as e:
-            print("❌ Mail Error:", e)
+def send_email(to_email, subject, content):
+    try:
+        sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+
+        message = Mail(
+            from_email="shrawaniofficial6@gmail.com",
+            to_emails=to_email,
+            subject=subject,
+            html_content=content
+        )
+
+        sg.send(message)
+        print("✅ Email sent")
+
+    except Exception as e:
+        print("❌ Email error:", str(e))
 
 @main.route("/")
 def home():
@@ -132,7 +144,6 @@ def companies():
 def about():
     return render_template("about_us.html")
 
-
 @main.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
@@ -140,15 +151,7 @@ def contact():
         email = request.form.get("email")
         message = request.form.get("message")
 
-        # Create Message
-        msg = Message(
-            subject="New Contact Message - SmartInternship",
-            sender=email,
-            recipients=["shrawaniofficial6@gmail.com"]
-        )
-
-        # HTML body for email
-        msg.html = f"""
+        html_content = f"""
         <html>
         <body style="font-family: Arial, sans-serif; color:#333;">
             <h2 style="color:#ff6b00;">New Message from SmartInternship Contact Form</h2>
@@ -156,21 +159,22 @@ def contact():
             <p><strong>Email:</strong> {email}</p>
             <p><strong>Message:</strong><br>{message}</p>
             <hr>
-            <p style="font-size:12px; color:#777;">This message was sent via SmartInternship Portal</p>
+            <p style="font-size:12px; color:#777;">
+                This message was sent via SmartInternship Portal
+            </p>
         </body>
         </html>
         """
 
-        # Send the email
         try:
-            threading.Thread(
-            target=send_async_email,
-            args=(current_app._get_current_object(), msg)
-             ).start()
-            # Redirect with success query parameter instead of flash
+            send_email(
+                "shrawaniofficial6@gmail.com",
+                "New Contact Message - SmartInternship",
+                html_content
+            )
             return redirect(url_for("main.contact", sent="true"))
+
         except Exception as e:
-            # Redirect with error query parameter
             return redirect(url_for("main.contact", error=str(e)))
 
     return render_template("contact.html")
@@ -269,3 +273,17 @@ def internship_detail(id):
         applied_ids=applied_ids,
         skills_list=skills_list   # ✅ PASS
     )
+
+
+@main.route("/test-email")
+def test_email():
+    try:
+        send_email(
+            "shrawaniofficial6@gmail.com",
+            "Test Email",
+            "<h2>Working 🚀</h2>"
+        )
+        return "✅ Email sent!"
+
+    except Exception as e:
+        return f"❌ Error: {str(e)}"

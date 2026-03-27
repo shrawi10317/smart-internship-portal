@@ -7,13 +7,14 @@ from app.forms.register_form import  RegistrationForm
 from werkzeug.security import generate_password_hash,check_password_hash
 from app.forms.login_form import LoginForm
 from app.models.user import User
-from flask_mail import Message
+# from flask_mail import Message
 import random
 from app import mail
 from flask import current_app
 import time
 import os
-
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 import threading
 
 
@@ -22,21 +23,25 @@ import threading
 
 auth_main=Blueprint('auth_main',__name__)
 
-def send_async_email(app, msg, retries=3, delay=2):
-    """
-    Sends email in a separate thread with retry logic for Render.
-    """
-    with app.app_context():
-        for attempt in range(1, retries + 1):
-            try:
-                mail.send(msg)
-                print(f"✅ Email sent to {msg.recipients} (attempt {attempt})")
-                return True
-            except Exception as e:
-                print(f"❌ Attempt {attempt} failed: {e}")
-                time.sleep(delay)
-        print(f"❌ All {retries} attempts failed for {msg.recipients}")
+def send_email(to_email, subject, content):
+    try:
+        sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+
+        message = Mail(
+            from_email="shrawaniofficial6@gmail.com",
+            to_emails=to_email,
+            subject=subject,
+            html_content=content
+        )
+
+        sg.send(message)
+        print(f"✅ Email sent to {to_email}")
+        return True
+
+    except Exception as e:
+        print(f"❌ Email error: {str(e)}")
         return False
+    
 
 @auth_main.route("/register", methods=["GET","POST"])
 def register():
@@ -76,17 +81,11 @@ def register():
         session["verify_user_id"] = user.id
 
         # 📩 SEND EMAIL
-        msg = Message(
-            subject="OTP Verification - SmartInternship",
-            sender="shrawaniofficial6@gmail.com",
-            recipients=[user.email]
+        send_email(
+        user.email,
+        "OTP Verification - SmartInternship",
+        f"<h2>Your OTP is: {otp}</h2>"
         )
-        msg.body = f"Your OTP is: {otp}"
-
-        threading.Thread(
-        target=send_async_email,
-        args=(current_app._get_current_object(), msg)
-         ).start()
 
         return redirect(url_for("auth_main.verify_otp"))
 
@@ -208,18 +207,11 @@ def forgot_password():
                 session["reset_otp"] = otp
 
                 # 📧 Send OTP
-                msg = Message(
-                  subject="Your OTP Code",
-                  sender="shrawaniofficial6@gmail.com",  # ✅ safest
-                  recipients=[email]
-                       )
-
-                msg.body = f"Your OTP is: {otp}"
-                threading.Thread(
-                target=send_async_email,
-                args=(current_app._get_current_object(), msg)
-                ).start()
-
+                send_email(
+                email,
+                "Your OTP Code",
+                f"<h2>Your OTP is: {otp}</h2>"
+                )
                 message = "OTP sent to your email 📧"
                 show_otp = True
 
@@ -315,16 +307,11 @@ def resend_otp():
     session['otp'] = otp
 
     # Send OTP
-    msg = Message(
-        subject="Your OTP - SmartInternship",
-        sender="shrawaniofficial6@gmail.com",
-        recipients=[user.email]
+    send_email(
+    user.email,
+    "Your OTP - SmartInternship",
+    f"<h2>Hello {user.name}, your new OTP is: {otp}</h2>"
     )
-    msg.body = f"Hello {user.name}, your new OTP is: {otp}"
-    threading.Thread(
-        target=send_async_email,
-        args=(current_app._get_current_object(), msg)
-         ).start()
 
     # Redirect back to verify OTP page with popup
     return redirect(url_for("auth_main.verify_otp", otp_sent="true"))
@@ -361,21 +348,3 @@ def init_test_user():
         return f"❌ Error: {str(e)}"
     
 
-@auth_main.route("/test-email")
-def test_email():
-    try:
-        print("USERNAME:", os.environ.get("MAIL_USERNAME"))
-
-        msg = Message(
-            subject="Test Email",
-            recipients=["shrawaniofficial6@gmail.com"],
-            body="If you get this, email is working!"
-        )
-
-        mail.send(msg)
-
-        return "✅ Email sent!"
-
-    except Exception as e:
-        print("ERROR:", str(e))   # 👈 important for logs
-        return f"❌ Email error: {str(e)}"

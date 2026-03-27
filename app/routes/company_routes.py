@@ -11,16 +11,35 @@ from app.models.company import Company
 from app.models.application import Application
 from app.models.student import Student
 from app.forms.internship_form import InternshipForm
-from flask_mail import Message
+# from flask_mail import Message
 from flask import current_app
 from datetime import datetime, timedelta
-from app import mail
+# from app import mail
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 from sqlalchemy import func
 from functools import wraps
 from flask import session, redirect, url_for
 from app.utils.decorators import login_required
 
 company = Blueprint("company",__name__,url_prefix="/company")
+
+def send_email(to_email, subject, content):
+    try:
+        sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+
+        message = Mail(
+            from_email="shrawaniofficial6@gmail.com",
+            to_emails=to_email,
+            subject=subject,
+            html_content=content
+        )
+
+        sg.send(message)
+        print(f"✅ Email sent to {to_email}")
+
+    except Exception as e:
+        print(f"❌ Email error: {str(e)}")
 
 # ================= Decorator =================
 # Decorator to ensure company profile exists and is complete
@@ -201,22 +220,17 @@ def accept_application(id):
     db.session.commit()
 
     # ✅ SEND EMAIL
-    msg = Message(
-        subject="Internship Application Accepted",
-        sender="shrawaniofficial6@gmail.com",
-        recipients=[application.student.email]
+    send_email(
+    application.student.email,
+    "Internship Application Accepted",
+    f"""
+    <p>Hello {application.student.name},</p>
+    <p><b>Congratulations!</b></p>
+    <p>Your application for <b>{application.internship.title}</b> has been ACCEPTED.</p>
+    <br>
+    <p>Best Regards,<br>Smart Internship Portal</p>
+    """
     )
-    msg.body = f"""
-Hello {application.student.name},
-
-Congratulations!
-
-Your application for {application.internship.title} has been ACCEPTED.
-
-Best Regards,
-Smart Internship Portal
-"""
-    mail.send(msg)
 
     # Redirect with query param instead of flash
     return redirect(url_for("company.applications", accepted="true"))
@@ -239,20 +253,17 @@ def reject_application(id):
     db.session.commit()
 
     # ✅ SEND EMAIL
-    msg = Message(
-        subject="Internship Application Update",
-        sender="shrawaniofficial6@gmail.com",
-        recipients=[application.student.email]
+    send_email(
+    application.student.email,
+    "Internship Application Update",
+    f"""
+    <p>Hello {application.student.name},</p>
+    <p>We regret to inform you that your application for 
+    <b>{application.internship.title}</b> was not selected.</p>
+    <br>
+    <p>Best Regards,<br>Smart Internship Portal</p>
+    """
     )
-    msg.body = f"""
-Hello {application.student.name},
-
-We regret to inform you that your application for {application.internship.title} was not selected.
-
-Best Regards,
-Smart Internship Portal
-"""
-    mail.send(msg)
 
     # Redirect with query param instead of flash
     return redirect(url_for("company.applications", rejected="true"))
@@ -302,20 +313,7 @@ def view_student(student_id):
         alert_message=alert_message
     )
 
-@company.route("/test_email")
-def test_email():
 
-    msg = Message(
-        subject="Test",
-        sender="shrawaniofficial6@gmail.com",
-        recipients=["shrawaniw03@gmail.com"]
-    )
-
-    msg.body = "Working!"
-
-    mail.send(msg)
-
-    return "Email Sent!"
 
 
 @company.route("/create_company_profile", methods=["GET", "POST"])
