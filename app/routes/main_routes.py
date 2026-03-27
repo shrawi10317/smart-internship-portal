@@ -16,24 +16,27 @@ import threading
 main = Blueprint('main', __name__)
 
 def send_email(to_email, subject, content):
-    try:
-        sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+    """Send an email using SendGrid (async-friendly with threading)."""
+    def _send():
+        try:
+            sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
+            message = Mail(
+                from_email=("Smart Internship", "shrawaniofficial6@gmail.com"),
+                to_emails=to_email,
+                subject=subject,
+                html_content=content
+            )
+            message.reply_to = "shrawaniofficial6@gmail.com"
+            sg.send(message)
+            print(f"✅ Email sent to {to_email}")
 
-        message = Mail(
-            from_email=("Smart Internship", "shrawaniofficial6@gmail.com"),
-            to_emails=to_email,
-            subject=subject,
-            html_content=content
-        )
+        except Exception as e:
+            import traceback
+            print("❌ Email sending failed:")
+            print(traceback.format_exc())
 
-        # 🔥 IMPORTANT
-        message.reply_to = "shrawaniofficial6@gmail.com"
-
-        sg.send(message)
-        print("✅ Email sent")
-
-    except Exception as e:
-        print("❌ Email error:", str(e))
+    # Run email sending in background thread
+    threading.Thread(target=_send).start()
 
 @main.route("/")
 def home():
@@ -149,6 +152,9 @@ def about():
 
 @main.route("/contact", methods=["GET", "POST"])
 def contact():
+    sent = request.args.get("sent")
+    error = request.args.get("error")
+
     if request.method == "POST":
         name = request.form.get("name")
         email = request.form.get("email")
@@ -170,17 +176,19 @@ def contact():
         """
 
         try:
+            # send asynchronously
             send_email(
                 "shrawaniofficial6@gmail.com",
                 "New Contact Message - SmartInternship",
                 html_content
             )
+            # Redirect to GET so page can show success message
             return redirect(url_for("main.contact", sent="true"))
 
         except Exception as e:
             return redirect(url_for("main.contact", error=str(e)))
 
-    return render_template("contact.html")
+    return render_template("contact.html", sent=sent, error=error)
 
 
 # student.py (or main routes)
@@ -281,12 +289,16 @@ def internship_detail(id):
 @main.route("/test-email")
 def test_email():
     try:
+        # Send email asynchronously using the same send_email function
         send_email(
-            "shrawaniofficial6@gmail.com",
-            "Test Email",
-            "<h2>Working 🚀</h2>"
+            "shrawaniw03@gmail.com",
+            "Test Email - SmartInternship",
+            "<h2>🚀 Test Email Working from Render!</h2><p>If you see this, SendGrid is working.</p>"
         )
-        return "✅ Email sent!"
+
+        # Immediate response to the browser
+        return "<h3>✅ Test email sent! Check your inbox (or spam) shortly.</h3>"
 
     except Exception as e:
-        return f"❌ Error: {str(e)}"
+        import traceback
+        return f"<h3>❌ Test email failed:</h3><pre>{traceback.format_exc()}</pre>"

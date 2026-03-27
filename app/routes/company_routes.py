@@ -21,6 +21,7 @@ from sqlalchemy import func
 from functools import wraps
 from flask import session, redirect, url_for
 from app.utils.decorators import login_required
+import threading
 
 company = Blueprint("company",__name__,url_prefix="/company")
 
@@ -223,17 +224,21 @@ def accept_application(id):
     db.session.commit()
 
     # ✅ SEND EMAIL
-    send_email(
-    application.student.email,
-    "Internship Application Accepted",
-    f"""
-    <p>Hello {application.student.name},</p>
-    <p><b>Congratulations!</b></p>
-    <p>Your application for <b>{application.internship.title}</b> has been ACCEPTED.</p>
-    <br>
-    <p>Best Regards,<br>Smart Internship Portal</p>
-    """
+    # ✅ SEND EMAIL (non-blocking)
+    threading.Thread(
+    target=send_email,
+    args=(
+        application.student.email,
+        "Internship Application Accepted",
+        f"""
+        <p>Hello {application.student.name},</p>
+        <p><b>Congratulations!</b></p>
+        <p>Your application for <b>{application.internship.title}</b> has been ACCEPTED.</p>
+        <br>
+        <p>Best Regards,<br>Smart Internship Portal</p>
+        """
     )
+    ).start()
 
     # Redirect with query param instead of flash
     return redirect(url_for("company.applications", accepted="true"))
@@ -256,17 +261,21 @@ def reject_application(id):
     db.session.commit()
 
     # ✅ SEND EMAIL
-    send_email(
-    application.student.email,
-    "Internship Application Update",
-    f"""
-    <p>Hello {application.student.name},</p>
-    <p>We regret to inform you that your application for 
-    <b>{application.internship.title}</b> was not selected.</p>
-    <br>
-    <p>Best Regards,<br>Smart Internship Portal</p>
-    """
+    # ✅ SEND EMAIL (non-blocking)
+    threading.Thread(
+    target=send_email,
+    args=(
+        application.student.email,
+        "Internship Application Update",
+        f"""
+        <p>Hello {application.student.name},</p>
+        <p>We regret to inform you that your application for 
+        <b>{application.internship.title}</b> was not selected.</p>
+        <br>
+        <p>Best Regards,<br>Smart Internship Portal</p>
+        """
     )
+    ).start()
 
     # Redirect with query param instead of flash
     return redirect(url_for("company.applications", rejected="true"))

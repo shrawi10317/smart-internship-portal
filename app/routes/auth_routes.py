@@ -14,7 +14,7 @@ from flask import current_app
 import time
 import os
 from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+from sendgrid.helpers.mail import Mail,Email
 import threading
 
 
@@ -28,17 +28,16 @@ def send_email(to_email, subject, content):
         sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
 
         message = Mail(
-            from_email=("Smart Internship", "shrawaniofficial6@gmail.com"),
+            from_email=Email("shrawaniofficial6@gmail.com", "Smart Internship"),
             to_emails=to_email,
             subject=subject,
             html_content=content
         )
 
-        # 🔥 IMPORTANT (Gmail trust fix)
-        message.reply_to = "shrawaniofficial6@gmail.com"
+        message.reply_to = Email("shrawaniofficial6@gmail.com", "Smart Internship")
 
-        sg.send(message)
-        print(f"✅ Email sent to {to_email}")
+        response = sg.send(message)
+        print(f"✅ Email sent to {to_email}, Status Code: {response.status_code}")
 
     except Exception as e:
         print(f"❌ Email error: {str(e)}")
@@ -82,11 +81,10 @@ def register():
         session["verify_user_id"] = user.id
 
         # 📩 SEND EMAIL
-        send_email(
-        user.email,
-        "OTP Verification - SmartInternship",
-        f"<h2>Your OTP is: {otp}</h2>"
-        )
+        threading.Thread(
+        target=send_email,
+        args=(user.email, "OTP Verification - SmartInternship", f"<h2>Your OTP is: {otp}</h2>")
+        ).start()
 
         return redirect(url_for("auth_main.verify_otp"))
 
@@ -208,11 +206,11 @@ def forgot_password():
                 session["reset_otp"] = otp
 
                 # 📧 Send OTP
-                send_email(
-                email,
-                "Your OTP Code",
-                f"<h2>Your OTP is: {otp}</h2>"
-                )
+                # 📧 Send OTP
+                threading.Thread(
+                target=send_email,
+                args=(email, "Your OTP Code", f"<h2>Your OTP is: {otp}</h2>")
+                ).start()
                 message = "OTP sent to your email 📧"
                 show_otp = True
 
@@ -308,11 +306,11 @@ def resend_otp():
     session['otp'] = otp
 
     # Send OTP
-    send_email(
-    user.email,
-    "Your OTP - SmartInternship",
-    f"<h2>Hello {user.name}, your new OTP is: {otp}</h2>"
-    )
+    # Send OTP
+    threading.Thread(
+    target=send_email,
+    args=(user.email, "Your OTP - SmartInternship", f"<h2>Hello {user.name}, your new OTP is: {otp}</h2>")
+    ).start()
 
     # Redirect back to verify OTP page with popup
     return redirect(url_for("auth_main.verify_otp", otp_sent="true"))
