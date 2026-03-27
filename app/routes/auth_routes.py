@@ -358,3 +358,22 @@ def init_test_user():
     except Exception as e:
         db.session.rollback()
         return f"❌ Error: {str(e)}"
+    
+
+@auth_main.route("/test-email")
+def test_email():
+    from flask_mail import Message
+    from app import mail
+
+    try:
+        msg = Message(
+            subject="Test Email",
+            recipients=["your_email@gmail.com"],
+            body="If you get this, email is working!"
+        )
+
+        mail.send(msg)
+        return "✅ Email sent!"
+
+    except Exception as e:
+        return f"❌ Email error: {str(e)}"
