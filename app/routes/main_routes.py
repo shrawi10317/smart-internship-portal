@@ -3,43 +3,51 @@ from app.models.internship import Internship
 from app.models.application import Application
 from app.models.company import Company
 from app.models.whishlist import Wishlist
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail, Email
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import time
-import os
 from app import db
-from flask import current_app
 import threading
 
 # ------------------- BLUEPRINT -------------------
 main = Blueprint('main', __name__)
 
-# ------------------- SEND EMAIL FUNCTION -------------------
-def send_email(to_email, subject, content, retries=3, delay=5):
-    """Send email via SendGrid asynchronously with retry logic."""
+# ------------------- LOCAL EMAIL FUNCTION -------------------
+import os
+
+def send_email(to_email, subject, content, retries=3, delay=2):
+    """Send email using Gmail SMTP via environment variables"""
+
     def send():
         for attempt in range(1, retries + 1):
             try:
-                sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
-                message = Mail(
-                    from_email=Email(os.environ.get("MAIL_USERNAME"), "Smart Internship"),
-                    to_emails=to_email,
-                    subject=subject,
-                    html_content=content
-                )
-                message.reply_to = Email(os.environ.get("MAIL_USERNAME"), "Smart Internship")
-                response = sg.send(message)
-                print(f"✅ Email sent to {to_email}, Status: {response.status_code}")
+                smtp_server = "smtp.gmail.com"
+                smtp_port = 587
+                smtp_user = os.environ.get("MAIL_USERNAME")  # Gmail from env
+                smtp_pass = os.environ.get("MAIL_PASSWORD")  # App password from env
+
+                msg = MIMEMultipart("alternative")
+                msg["Subject"] = subject
+                msg["From"] = smtp_user
+                msg["To"] = to_email
+                msg.attach(MIMEText(content, "html"))
+
+                with smtplib.SMTP(smtp_server, smtp_port) as server:
+                    server.starttls()
+                    server.login(smtp_user, smtp_pass)
+                    server.sendmail(smtp_user, to_email, msg.as_string())
+
+                print(f"✅ Email sent to {to_email}")
                 break
             except Exception as e:
-                print(f"❌ Attempt {attempt} failed: {str(e)}")
+                print(f"❌ Attempt {attempt} failed: {e}")
                 if attempt < retries:
-                    print(f"⏳ Retrying in {delay} seconds...")
                     time.sleep(delay)
                 else:
-                    print(f"❌ Failed to send email after {retries} attempts.")
+                    print(f"❌ Failed after {retries} attempts.")
 
-    threading.Thread(target=send).start()
+    threading.Thread(target=send, daemon=True).start()
 
 # ------------------- ROUTES -------------------
 
@@ -124,7 +132,7 @@ def companies():
     search = request.args.get("search", "", type=str)
     location = request.args.get("location", "", type=str)
 
-    query = Company.query.filter(Company.company_name.isnot(None))  # only complete profiles
+    query = Company.query.filter(Company.company_name.isnot(None))
 
     if search:
         query = query.filter(Company.company_name.ilike(f"%{search}%"))
@@ -171,7 +179,7 @@ def contact():
 
         try:
             send_email(
-                "shrawaniofficial6@gmail.com",
+                "shrawaniofficial6@gmail.com",  # your email to receive messages
                 "New Contact Message - SmartInternship",
                 html_content
             )
@@ -258,21 +266,9 @@ def internship_detail(id):
 # ------------------- TEST EMAIL -------------------
 @main.route("/test-email")
 def test_email():
-    try:
-        send_email(
-            "shrawaniw03@gmail.com",
-            "🚀 Test Email from SmartInternship",
-            """
-            <h2 style='color:#ff6b00;'>SendGrid Test Email</h2>
-            <p>If you see this message, SendGrid email is working correctly!</p>
-            """
-        )
-        return "<h3>✅ Test email sent! Check your inbox (or spam) shortly.</h3>"
-    except Exception as e:
-        import traceback
-        return f"<h3>❌ Test email failed:</h3><pre>{traceback.format_exc()}</pre>"
-
-# ------------------- PING -------------------
-@main.route("/ping")
-def ping():
-    return "pong ✅"
+    send_email(
+        "shrawaniofficial6@gmail.com",
+        "🚀 Test Email from SmartInternship",
+        "<h2 style='color:#ff6b00;'>Local SMTP Test Email</h2><p>If you see this, email works!</p>"
+    )
+    return "<h3>✅ Test email triggered! Check inbox/spam.</h3>"

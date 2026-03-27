@@ -10,21 +10,18 @@ class Config:
     os.makedirs(INSTANCE_DIR, exist_ok=True)
 
     DB_PATH = os.path.join(INSTANCE_DIR, "internship_portal.db")
-
-    DATABASE_URL = os.environ.get("DATABASE_URL")
-
-    if DATABASE_URL:
-        if DATABASE_URL.startswith("postgres://"):
-            DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://")
-        SQLALCHEMY_DATABASE_URI = DATABASE_URL
-    else:
-        SQLALCHEMY_DATABASE_URI = f"sqlite:///{DB_PATH}"
-
+    SQLALCHEMY_DATABASE_URI = f"sqlite:///{DB_PATH}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # ----------------- SENDGRID -----------------
-    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY") 
-    DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "shrawaniofficial6@gmail.com")
+    # ----------------- DEBUG -----------------
+    DEBUG = True
+    PORT = 5000
 
-    # ----------------- OTHER -----------------
-    DEBUG = os.environ.get("FLASK_DEBUG", "0") == "1"  # production default 0
+    # ----------------- EMAIL (GMAIL SMTP) -----------------
+    MAIL_SERVER = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
+    MAIL_PORT = int(os.environ.get("MAIL_PORT", 587))
+    MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS", "True") == "True"
+    MAIL_USE_SSL = os.environ.get("MAIL_USE_SSL", "False") == "True"
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")  # your Gmail
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")  # Gmail app password
+    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", MAIL_USERNAME)

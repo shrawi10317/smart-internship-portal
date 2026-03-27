@@ -4,7 +4,12 @@ from app.models.internship import Internship
 from app import db
 from flask import current_app
 import os
+from functools import wraps
+from urllib.parse import urlencode
 from werkzeug.utils import secure_filename
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from app.forms.internship_form import InternshipForm
 from app.forms.company_form import CompanyProfileForm
 from app.models.company import Company
@@ -29,37 +34,43 @@ company = Blueprint("company",__name__,url_prefix="/company")
 
 def send_email(to_email, subject, content, retries=3, delay=5):
     """
-    Send email via SendGrid API with retry logic.
+    Send email using Gmail SMTP (supports Render deployment) with retry logic.
     """
 
-    message = Mail(
-        from_email=Email(os.environ.get("MAIL_USERNAME"), "Smart Internship"),  # Verified Gmail
-        to_emails=to_email,
-        subject=subject,
-        html_content=content
-    )
+    def send():
+        for attempt in range(1, retries + 1):
+            try:
+                smtp_server = "smtp.gmail.com"
+                smtp_port = 587
+                smtp_user = os.environ.get("MAIL_USERNAME")
+                smtp_pass = os.environ.get("MAIL_PASSWORD")
 
-    message.reply_to = Email(os.environ.get("MAIL_USERNAME"), "Smart Internship")
+                msg = MIMEMultipart("alternative")
+                msg["Subject"] = subject
+                msg["From"] = smtp_user
+                msg["To"] = to_email
+                msg.attach(MIMEText(content, "html"))
 
-    for attempt in range(1, retries + 1):
-        try:
-            sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
-            response = sg.send(message)
-            print(f"✅ Email sent to {to_email}, Status Code: {response.status_code}")
-            return True
-        except Exception as e:
-            print(f"❌ Attempt {attempt} failed: {str(e)}")
-            if attempt < retries:
-                print(f"⏳ Retrying in {delay} seconds...")
-                time.sleep(delay)
-            else:
-                return False
+                with smtplib.SMTP(smtp_server, smtp_port) as server:
+                    server.starttls()
+                    server.login(smtp_user, smtp_pass)
+                    server.sendmail(smtp_user, to_email, msg.as_string())
 
+                print(f"✅ Email sent to {to_email}")
+                break
+
+            except Exception as e:
+                print(f"❌ Attempt {attempt} failed: {e}")
+                if attempt < retries:
+                    print(f"⏳ Retrying in {delay} seconds...")
+                    time.sleep(delay)
+                else:
+                    print(f"❌ Failed to send email after {retries} attempts.")
+
+    threading.Thread(target=send, daemon=True).start()
 # ================= Decorator =================
 # Decorator to ensure company profile exists and is complete
-from functools import wraps
-from flask import session, redirect, url_for
-from urllib.parse import urlencode
+
 
 def company_profile_required(f):
     @wraps(f)

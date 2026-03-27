@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail
 
 db = SQLAlchemy()
-mail = Mail()
+mail = Mail()  # Flask-Mail instance
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
@@ -49,7 +49,6 @@ def create_app():
 
     # ----------------- DATABASE CREATION -----------------
     with app.app_context():
-        # For PostgreSQL (Heroku), db.create_all() will still work
         try:
             print("Creating database at:", app.config['SQLALCHEMY_DATABASE_URI'])
             db.create_all()
