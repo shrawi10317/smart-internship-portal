@@ -362,18 +362,19 @@ def init_test_user():
 
 @auth_main.route("/test-email")
 def test_email():
-    from flask_mail import Message
-    from app import mail
-
     try:
+        print("USERNAME:", os.environ.get("MAIL_USERNAME"))
+
         msg = Message(
             subject="Test Email",
-            recipients=["shrawaniofficial6@gmail.com"],
+            recipients=["youractualemail@gmail.com"],
             body="If you get this, email is working!"
         )
 
         mail.send(msg)
+
         return "✅ Email sent!"
 
     except Exception as e:
+        print("ERROR:", str(e))   # 👈 important for logs
         return f"❌ Email error: {str(e)}"
