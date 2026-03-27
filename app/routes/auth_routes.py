@@ -28,19 +28,20 @@ def send_email(to_email, subject, content):
         sg = SendGridAPIClient(os.environ.get("SENDGRID_API_KEY"))
 
         message = Mail(
-            from_email="shrawaniofficial6@gmail.com",
+            from_email=("Smart Internship", "shrawaniofficial6@gmail.com"),
             to_emails=to_email,
             subject=subject,
             html_content=content
         )
 
+        # 🔥 IMPORTANT (Gmail trust fix)
+        message.reply_to = "shrawaniofficial6@gmail.com"
+
         sg.send(message)
         print(f"✅ Email sent to {to_email}")
-        return True
 
     except Exception as e:
         print(f"❌ Email error: {str(e)}")
-        return False
     
 
 @auth_main.route("/register", methods=["GET","POST"])
