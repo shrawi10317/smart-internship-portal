@@ -312,3 +312,8 @@ def test_email():
     except Exception as e:
         import traceback
         return f"<h3>❌ Test email failed:</h3><pre>{traceback.format_exc()}</pre>"
+
+
+@main.route("/ping")
+def ping():
+    return "pong ✅"
